@@ -41,6 +41,7 @@ class _NewTaskState extends State<NewTask> {
               currentlyLoggedUser.phoneNumber,
               currentlyLoggedUser.email);
           await fetchDataFromDB();
+          await fetchUsersTaskFromDB();
           setState(() {
 //            taskList.add(Task(
 //                title: titleValue,

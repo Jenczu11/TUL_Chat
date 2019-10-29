@@ -5,6 +5,7 @@ import 'package:tul_mobileapp/pages/profile.dart';
 import 'package:tul_mobileapp/pages/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:tul_mobileapp/pages/usersTasks.dart';
 import '../objects/task.dart';
 import '../logic/rest_api.dart';
 import 'chat.dart';
@@ -23,6 +24,7 @@ class _HomeState extends State<Home> {
   int currentTab = 0; // to keep track of active tab index
   bool onNewTask = false;
   final List<Widget> screens = [
+    UsersTasks(),
     Chat(),
     Profile(),
     Settings(),
@@ -90,7 +92,32 @@ class _HomeState extends State<Home> {
                         ),
                       ],
                     ),
-                  )
+                  ),
+                  MaterialButton(
+                    minWidth: 40,
+                    onPressed: () {
+                      setState(() {
+                        currentScreen =
+                            UsersTasks(); // if user taps on this dashboard tab will be active
+                        currentTab = 0;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.dashboard,
+                          color: currentTab == 0 ? Colors.blue : Colors.grey,
+                        ),
+                        Text(
+                          'Your Tasks',
+                          style: TextStyle(
+                            color: currentTab == 0 ? Colors.blue : Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
 

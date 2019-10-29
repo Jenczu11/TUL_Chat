@@ -57,6 +57,7 @@ class _StartState extends State<Start> {
                 showProcessingDialog(context, "Signing in...");
                 await _signIn(phoneNumberController.text);
                 await fetchDataFromDB();
+                await fetchUsersTaskFromDB();
                 Navigator.of(context).pop();
                 phoneNumberController.clear();
                 Navigator.push(

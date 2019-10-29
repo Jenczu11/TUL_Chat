@@ -8,7 +8,7 @@ import 'package:tul_mobileapp/objects/task.dart';
 
 
 List<Task> taskList = new List<Task>();
-
+List<Task> userTaskList = new List<Task>();
 
 Future<Null> fetchDataFromDB() async{
   final url = "https://lut-mobileapp.firebaseio.com/tasks.json";
@@ -33,6 +33,35 @@ Future<Null> fetchDataFromDB() async{
       });
     }
     taskList = loadedTasks;
+  } catch(error){
+    throw (error);
+  }
+
+}
+
+Future<Null> fetchUsersTaskFromDB() async{
+  final url = "https://lut-mobileapp.firebaseio.com/tasks.json";
+  try{
+    final response = await http.get(url);
+    final extractedData = json.decode(response.body) as Map<String,dynamic>;
+
+    final List<Task> loadedTasks = [];
+    if(extractedData!= null) {
+      extractedData.forEach((taskId, taskData) {
+        if(taskData['phoneNumber']==prefix0.currentlyLoggedUser.phoneNumber)
+        loadedTasks.add(Task(
+            id: taskId,
+            title: taskData['title'],
+            description: taskData['description'],
+            tags: taskData['tags'],
+            email: taskData['email'],
+            phoneNumber: taskData['phoneNumber'],
+            isDone: taskData['isDone'],
+            userAssigned: taskData['name']
+        ));
+      });
+    }
+    userTaskList = loadedTasks;
   } catch(error){
     throw (error);
   }
