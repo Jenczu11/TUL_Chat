@@ -3,29 +3,24 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:location/location.dart';
 import 'package:tul_mobileapp/constants.dart';
-
 import 'package:tul_mobileapp/objects/task.dart';
 import 'package:tul_mobileapp/logic/rest_api.dart';
+import 'package:flutter_tags/tag.dart';
 
 class NewTask extends StatefulWidget {
- 
   @override
   _NewTaskState createState() => _NewTaskState();
-
 }
 
 class _NewTaskState extends State<NewTask> {
   Widget newTask;
-  String titleValue = '';
-  String description;
-  String category;
+  String titleValue = "";
+  String description = "" ;
   LocationData currentLocation;
   var location = new Location();
 
-
   @override
-  void initState() {
-  }
+  void initState() {}
 
   @override
   Widget build(BuildContext context) {
@@ -33,17 +28,25 @@ class _NewTaskState extends State<NewTask> {
       floatingActionButton: FloatingActionButton.extended(
         icon: Icon(Icons.add),
         label: Text('Add'),
-        onPressed: () async{
-          await postDataToDB(currentlyLoggedUser.name,currentlyLoggedUser.phoneNumber,currentlyLoggedUser.email);
+        onPressed: () async {
+          print(tags);
+          if(tags.isEmpty){
+            tags.add("");
+          }
+          await postDataToDB(
+              titleValue,
+              description,
+              tags,
+              currentlyLoggedUser.name,
+              currentlyLoggedUser.phoneNumber,
+              currentlyLoggedUser.email);
           await fetchDataFromDB();
           setState(() {
-                      taskList.add(Task(
-                        title: titleValue,
-                        description: description,
-                        category: category
-
-                      ));
-                      });
+//            taskList.add(Task(
+//                title: titleValue,
+//                description: description,
+//                tags: tags));
+          });
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -53,62 +56,70 @@ class _NewTaskState extends State<NewTask> {
       body: Container(
         margin: EdgeInsets.all(20.0),
         child: ListView(
-        children: <Widget>[
-          TextField(
-            decoration: InputDecoration(labelText: 'Title'),
-            onChanged: (String value) {
-              setState(() {
-                titleValue = value;
-              });
-            },
-          ),
-          TextField(
-            decoration: InputDecoration(labelText: 'Description'),
-            maxLines: 4,
-            onChanged: (String value) {
-              setState(() {
-                description = value;
-              });
-            },
-          ),
-           TextField(
-            decoration: InputDecoration(labelText: 'Category'),
-            onChanged: (String value) {
-              setState(() {
-                category = value;
-              });
-            },
-          ),
-        ],
+          children: <Widget>[
+            TextField(
+              decoration: InputDecoration(labelText: 'Title'),
+              onChanged: (String value) {
+                setState(() {
+                  titleValue = value;
+                });
+              },
+            ),
+            TextField(
+              decoration: InputDecoration(labelText: 'Description'),
+              maxLines: 4,
+              onChanged: (String value) {
+                setState(() {
+                  description = value;
+                });
+              },
+            ),
+            Tags(
+              key: tagStateKey,
+              textField: TagsTextFiled(
+                textStyle: TextStyle(fontSize: 10),
+                onSubmitted: (String str) {
+                  // Add item to the data source.
+                  setState(() {
+                    // required
+                    tags.add(str);
+                  });
+                },
+              ),
+              itemCount: tags.length, // required
+              itemBuilder: (int index) {
+                final item = tags[index];
+                return ItemTags(
+                  title: item,
+                  key: Key(index.toString()),
+                  index: index,
+                  // required
+                  textStyle: TextStyle(
+                    fontSize: 12.0,
+                  ),
+                  combine: ItemTagsCombine.withTextBefore,
+                  removeButton: ItemTagsRemoveButton(),
+                  onRemoved: () {
+                    // Remove the item from the data source.
+                    setState(() {
+                      // required
+                      tags.removeAt(index);
+                    });
+                  },
+                );
+              },
+            )
+          ],
+        ),
       ),
-    ),);
-  }
-
-  Future<Null> postDataToDB(String _name, String _phoneNumber, String _email) async{
-    final url = "https://lut-mobileapp.firebaseio.com/tasks.json";
-    http.post(url, body: json.encode({
-      "title" : titleValue,
-      "description" : description,
-      "category" : category,
-      "isDone" : false,
-      "name" : _name,
-      "phoneNumber" : _phoneNumber,
-      "email" : _email
-
-    }),).then((response) {
-      taskList.add(new Task(id: json.decode(response.body)['name'],userAssigned: _name,phoneNumber: _phoneNumber,email: _email,category: category, description: description, isDone: false, title: titleValue));
-    }
     );
   }
 
-  Future<Null> getUsersLocation() async{
-        try {
+  Future<Null> getUsersLocation() async {
+    try {
       currentLocation = await location.getLocation();
     } on Exception {
-        currentLocation = null;
-      }
+      currentLocation = null;
     }
   }
-
-
-
+}

@@ -58,6 +58,7 @@ class _StartState extends State<Start> {
                 await _signIn(phoneNumberController.text);
                 await fetchDataFromDB();
                 Navigator.of(context).pop();
+                phoneNumberController.clear();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -66,6 +67,7 @@ class _StartState extends State<Start> {
                     },
                     fullscreenDialog: false,
                   ),
+
                 );
               }
             ),

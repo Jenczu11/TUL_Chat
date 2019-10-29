@@ -1,3 +1,4 @@
+import 'package:tul_mobileapp/constants.dart';
 import 'package:tul_mobileapp/logic/rest_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -59,8 +60,8 @@ class TileItem extends StatelessWidget {
                   child: ListTile(
                     leading: Icon(Icons.album),
                     title: Text(taskList[num].title),
-                    subtitle: Text(taskList[num].category),
-                  ),
+                  subtitle: Text(tagsToString(taskList[num])),
+                ),
                 ),
                 ButtonTheme.bar(
                   // make buttons use the appropriate styles for cards
@@ -166,7 +167,7 @@ class PageItem extends StatelessWidget {
                 child: Material(
                   child: ListTile(
                     title: Text(taskList[num].title),
-                    subtitle: Text(taskList[num].category),
+                    subtitle: Text(taskList[num].phoneNumber),
                   ),
                 ),
                 onTap: () => Navigator.of(context).pop(),
