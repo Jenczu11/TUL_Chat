@@ -1,8 +1,8 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:tul_mobileapp/constants.dart';
 import 'package:tul_mobileapp/constants.dart' as prefix0;
-
 import 'package:tul_mobileapp/objects/task.dart';
 
 
@@ -71,4 +71,48 @@ Future<Null> patchDataDB(String userId,String _name, String _email, String _phon
     currentlyLoggedUser.email = _email;
   });
 }
+
+
+//Future<Null> _signIn(String _phoneNumber) async{
+//  final url = "https://lut-mobileapp.firebaseio.com/users.json";
+//  bool _exists = false;
+//  try{
+//    final response = await http.get(url);
+//    final extractedData = json.decode(response.body) as Map<String,dynamic>;
+//    if(extractedData!=null) {
+//      extractedData.forEach((userId, userData) {
+//        print(userData['phoneNumber'].toString());
+//        if (userData['phoneNumber'].toString() == _phoneNumber) {
+//          _exists = true;
+//          print("Already exists - do nothing ");
+////          currentlyLoggedUser = new User(
+////            id: userId,
+////            phoneNumber: userData['phoneNumber'],
+////            email: userData['email'],
+////            name: userData['name'],
+////          );
+//        }
+//      });
+//    }
+//  } catch(error){
+//    throw (error);
+//  }
+//  if(_exists == false){
+//    print("Dosen't exist - add to database");
+//    http.post(url, body: json.encode({
+//      "phoneNumber" : _phoneNumber,
+//      "name" : "",
+//      "email" : ""
+//    }),).then((response) {
+//      currentlyLoggedUser = new User(id:json.decode(response.body)['name'], phoneNumber: _phoneNumber,
+//        email: "",
+//        name: "",
+//      );
+//    }
+//    );
+//  }
+//
+//}
+
+
 

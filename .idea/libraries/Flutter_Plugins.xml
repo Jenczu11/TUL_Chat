@@ -3,7 +3,8 @@
     <CLASSES>
       <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/location-2.3.5" />
       <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-5.2.5" />
-      <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-0.5.21+8" />
+      <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.4.0+9" />
+      <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth-0.14.0+5" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

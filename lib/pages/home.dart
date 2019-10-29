@@ -1,15 +1,17 @@
-import 'dart:convert';
-
-import 'package:tul_mobileapp/pages/processing.dart';
+import 'package:flutter/material.dart';
+import 'package:tul_mobileapp/logic/authentication.dart';
 import 'package:tul_mobileapp/pages/profile.dart';
 import 'package:tul_mobileapp/pages/settings.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import '../objects/task.dart';
-import '../logic/rest_api.dart';
+
 import 'chat.dart';
 import 'createTask.dart';
 class Home extends StatefulWidget {
+  Home({Key key, this.auth, this.userId, this.logoutCallback})
+      : super(key: key);
+
+  BaseAuth auth;
+  VoidCallback logoutCallback;
+  String userId;
   @override
   _HomeState createState() => _HomeState();
 }
@@ -34,9 +36,19 @@ class _HomeState extends State<Home> {
 
 
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            FlatButton.icon(onPressed: (() async {
+              await signOut();
+            }), icon: Icon(Icons.power_settings_new,color: Colors.red,), label: Text("Log Out"))
+          ],
+        ),
+      ),
       //backgroundColor: currentColor,
       body: PageStorage(
         child: currentScreen,
@@ -159,6 +171,14 @@ class _HomeState extends State<Home> {
     );
   }
 
+  signOut() async {
+    try {
+      await widget.auth.signOut();
+      widget.logoutCallback();
+    } catch (e) {
+      print(e);
+    }
+  }
 
 
 }

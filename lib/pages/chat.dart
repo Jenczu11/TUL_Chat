@@ -1,7 +1,7 @@
-import 'package:tul_mobileapp/constants.dart';
-import 'package:tul_mobileapp/logic/rest_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:tul_mobileapp/constants.dart';
+import 'package:tul_mobileapp/logic/rest_api.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Chat extends StatefulWidget {
@@ -14,7 +14,6 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-
           appBar: AppBar(
             title: Text("Pending help requests"),
             backgroundColor: Colors.deepPurple,
@@ -128,18 +127,6 @@ class PageItem extends StatelessWidget {
       primary: true,
       leading: IconTheme(
           data: IconThemeData(color: Colors.white), child: CloseButton()),
-      // flexibleSpace: Container(
-      //   decoration: BoxDecoration(
-      //     gradient: LinearGradient(
-      //       begin: Alignment.topCenter,
-      //       end: Alignment.bottomCenter,
-      //       colors: [
-      //         Colors.black.withOpacity(0.4),
-      //         Colors.black.withOpacity(0.1),
-      //       ],
-      //     ),
-      //   ),
-      // ),
       backgroundColor: Colors.transparent,
     );
     final MediaQueryData mediaQuery = MediaQuery.of(context);
