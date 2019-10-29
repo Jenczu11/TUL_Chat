@@ -1,2 +1,0 @@
-# tul_mobileapp
- 
