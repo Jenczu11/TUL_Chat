@@ -17,56 +17,43 @@ Future<Null> fetchDataFromDB() async{
     final extractedData = json.decode(response.body) as Map<String,dynamic>;
 
     final List<Task> loadedTasks = [];
+    final List<Task> loadedUsersTasks = [];
     if(extractedData!= null) {
       extractedData.forEach((taskId, taskData) {
-        if(taskData['phoneNumber']!=prefix0.currentlyLoggedUser.phoneNumber)
-        loadedTasks.add(Task(
-            id: taskId,
-            title: taskData['title'],
-            description: taskData['description'],
-            tags: taskData['tags'],
-            email: taskData['email'],
-            phoneNumber: taskData['phoneNumber'],
-            isDone: taskData['isDone'],
-            userAssigned: taskData['name']
-        ));
+        if(taskData['phoneNumber']!=currentlyLoggedUser.phoneNumber) {
+          loadedTasks.add(Task(
+              id: taskId,
+              title: taskData['title'],
+              description: taskData['description'],
+              tags: taskData['tags'],
+              email: taskData['email'],
+              phoneNumber: taskData['phoneNumber'],
+              isDone: taskData['isDone'],
+              userAssigned: taskData['name']
+          ));
+        }
+        else if(taskData['phoneNumber'] == currentlyLoggedUser.phoneNumber){
+          loadedUsersTasks.add(Task(
+              id: taskId,
+              title: taskData['title'],
+              description: taskData['description'],
+              tags: taskData['tags'],
+              email: taskData['email'],
+              phoneNumber: taskData['phoneNumber'],
+              isDone: taskData['isDone'],
+              userAssigned: taskData['name']
+          ));
+        }
       });
     }
     taskList = loadedTasks;
+    userTaskList = loadedUsersTasks;
   } catch(error){
     throw (error);
   }
 
 }
 
-Future<Null> fetchUsersTaskFromDB() async{
-  final url = "https://lut-mobileapp.firebaseio.com/tasks.json";
-  try{
-    final response = await http.get(url);
-    final extractedData = json.decode(response.body) as Map<String,dynamic>;
-
-    final List<Task> loadedTasks = [];
-    if(extractedData!= null) {
-      extractedData.forEach((taskId, taskData) {
-        if(taskData['phoneNumber']==prefix0.currentlyLoggedUser.phoneNumber)
-        loadedTasks.add(Task(
-            id: taskId,
-            title: taskData['title'],
-            description: taskData['description'],
-            tags: taskData['tags'],
-            email: taskData['email'],
-            phoneNumber: taskData['phoneNumber'],
-            isDone: taskData['isDone'],
-            userAssigned: taskData['name']
-        ));
-      });
-    }
-    userTaskList = loadedTasks;
-  } catch(error){
-    throw (error);
-  }
-
-}
 
 
 Future<Null> postDataToDB(String titleValue, String description, List<dynamic> tags, String _name, String _phoneNumber, String _email) async{
@@ -99,5 +86,14 @@ Future<Null> patchDataDB(String userId,String _name, String _email, String _phon
     currentlyLoggedUser.name = _name;
     currentlyLoggedUser.email = _email;
   });
+}
+
+
+Future<Null> deleteTask(Task task) async{
+  final url = "https://lut-mobileapp.firebaseio.com/tasks/${task.id}.json";
+  http.delete(url,).then((response) {
+    userTaskList.remove(task);
+  }
+  );
 }
 

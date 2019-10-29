@@ -20,7 +20,9 @@ class _NewTaskState extends State<NewTask> {
   var location = new Location();
 
   @override
-  void initState() {}
+  void initState() {
+   // getUsersLocation();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +43,6 @@ class _NewTaskState extends State<NewTask> {
               currentlyLoggedUser.phoneNumber,
               currentlyLoggedUser.email);
           await fetchDataFromDB();
-          await fetchUsersTaskFromDB();
           setState(() {
 //            taskList.add(Task(
 //                title: titleValue,
@@ -78,7 +79,7 @@ class _NewTaskState extends State<NewTask> {
             Tags(
               key: tagStateKey,
               textField: TagsTextFiled(
-                textStyle: TextStyle(fontSize: 10),
+                textStyle: TextStyle(fontSize: 24),
                 onSubmitted: (String str) {
                   // Add item to the data source.
                   setState(() {

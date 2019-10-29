@@ -68,7 +68,7 @@ class TileItem extends StatelessWidget {
                   child: ButtonBar(
                     children: <Widget>[
                       FlatButton(
-                        child: const Text('Pomagam'),
+                        child: const Text('More Details'),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -195,11 +195,11 @@ class PageItem extends StatelessWidget {
                         child: new Container(
                       child: new Align(
                         alignment: Alignment.bottomRight,
-                        child: new FlatButton(
-                          child: Text('Bottom'),
+                        child: new FlatButton.icon(
+                          label: Text("Back"),
+                          icon: Icon(Icons.arrow_back),
                           onPressed: () => {
-                            //TODO: Na wcisnieciu usun odpowiednia karte z bazy
-                            print("Wcisnalem przycisk bottom")
+                            Navigator.of(context).pop()
                           },
                         ),
                       ),

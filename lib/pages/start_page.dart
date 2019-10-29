@@ -57,7 +57,6 @@ class _StartState extends State<Start> {
                 showProcessingDialog(context, "Signing in...");
                 await _signIn(phoneNumberController.text);
                 await fetchDataFromDB();
-                await fetchUsersTaskFromDB();
                 Navigator.of(context).pop();
                 phoneNumberController.clear();
                 Navigator.push(
@@ -89,7 +88,6 @@ class _StartState extends State<Start> {
       final extractedData = json.decode(response.body) as Map<String,dynamic>;
       if(extractedData!=null) {
         extractedData.forEach((userId, userData) {
-          print(userData['phoneNumber'].toString());
           if (userData['phoneNumber'].toString() == _phoneNumber) {
             _exists = true;
             print("Already exists - do nothing ");

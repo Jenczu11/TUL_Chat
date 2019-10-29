@@ -67,20 +67,7 @@ class TileItem extends StatelessWidget {
                   // make buttons use the appropriate styles for cards
                   child: ButtonBar(
                     children: <Widget>[
-                      FlatButton(
-                        child: const Text('Delete Task'),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return new PageItem();
-                              },
-                              fullscreenDialog: true,
-                            ),
-                          );
-                        },
-                      ),
+
                     ],
                   ),
                 ),
@@ -176,31 +163,31 @@ class PageItem extends StatelessWidget {
               Expanded(
                 child: Container(
                   child: Column(children: <Widget>[
-                    new Center(child: Text(userTaskList[num].description)),
-                    FlatButton.icon(
-                      label: Text("Call me"),
-                      icon: Icon(Icons.phone_in_talk,color: Colors.green,),
-                      onPressed: (() async {
-                        await launch("tel:${userTaskList[num].phoneNumber}");
-                      }),
-                    ),
-                    FlatButton.icon(
-                      label: Text("Mail me"),
-                      icon: Icon(Icons.mail,color: Colors.redAccent,),
-                      onPressed: (() async {
-                        await launch("mailto:${userTaskList[num].email}");
-                      }),
-                    ),
+                    new Center(child: Text("Description : "+ userTaskList[num].description)),
                     new Expanded(
                         child: new Container(
                       child: new Align(
                         alignment: Alignment.bottomRight,
-                        child: new FlatButton(
-                          child: Text('Bottom'),
-                          onPressed: () => {
-                            //TODO: Na wcisnieciu usun odpowiednia karte z bazy
-                            print("Wcisnalem przycisk bottom")
-                          },
+                        child: Row(
+                          children: <Widget>[
+                            FlatButton.icon(
+                              icon: Icon(Icons.delete,color: Colors.red,),
+                              label: const Text('Delete Task',style: TextStyle(color: Colors.black),),
+                              onPressed: () {
+                                deleteTask(userTaskList[num]);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            SizedBox(width: 180,),
+                            FlatButton.icon(
+                              label: Text("Back"),
+                              icon: Icon(Icons.arrow_back),
+                              onPressed: () => {
+                                Navigator.of(context).pop()
+                              },
+                            ),
+                          ],
+
                         ),
                       ),
                       padding: EdgeInsets.only(bottom: 24),
