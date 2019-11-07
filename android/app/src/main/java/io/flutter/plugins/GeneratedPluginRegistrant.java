@@ -1,10 +1,9 @@
 package io.flutter.plugins;
 
-import com.lyokone.location.LocationPlugin;
-
 import io.flutter.plugin.common.PluginRegistry;
-import io.flutter.plugins.firebase.core.FirebaseCorePlugin;
 import io.flutter.plugins.firebaseauth.FirebaseAuthPlugin;
+import io.flutter.plugins.firebase.core.FirebaseCorePlugin;
+import com.lyokone.location.LocationPlugin;
 import io.flutter.plugins.urllauncher.UrlLauncherPlugin;
 
 /**

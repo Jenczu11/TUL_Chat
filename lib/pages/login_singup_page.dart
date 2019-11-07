@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tul_mobileapp/constants.dart';
+import 'package:tul_mobileapp/objects/user.dart';
 
 import '../logic/authentication.dart';
+import '../logic/rest_api.dart';
 
 class LoginSignupPage extends StatefulWidget {
   LoginSignupPage({this.auth, this.loginCallback});
@@ -44,6 +47,11 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
         if (_isLoginForm) {
           userId = await widget.auth.signIn(_email, _password);
           print('Signed in: $userId');
+
+          currentlyLoggedUser = new User(id: userId, email: _email, name:  "", phoneNumber: "");
+          await signIn(_email);
+          await fetchDataFromDB();
+          print(currentlyLoggedUser.toString());
         } else {
           userId = await widget.auth.signUp(_email, _password);
           //widget.auth.sendEmailVerification();
@@ -92,7 +100,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text('Flutter login demo'),
+          title: new Text('Lodz University of Technology'),
         ),
         body: Stack(
           children: <Widget>[
@@ -120,8 +128,8 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
           child: new ListView(
             shrinkWrap: true,
             children: <Widget>[
-              SizedBox(height: 150,),
-             // showLogo(),
+              SizedBox(height: 20,),
+              showLogo(),
               showEmailInput(),
               showPasswordInput(),
               showPrimaryButton(),
@@ -149,19 +157,19 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
     }
   }
 
-//  Widget showLogo() {
-//    return new Hero(
-//      tag: 'hero',
-//      child: Padding(
-//        padding: EdgeInsets.fromLTRB(0.0, 70.0, 0.0, 0.0),
-//        child: CircleAvatar(
-//          backgroundColor: Colors.transparent,
-//          radius: 48.0,
-//          child: Image.asset('assets/flutter-icon.png'),
-//        ),
-//      ),
-//    );
-//  }
+  Widget showLogo() {
+    return new Hero(
+      tag: 'hero',
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(0.0, 70.0, 0.0, 0.0),
+        child: CircleAvatar(
+          backgroundColor: Colors.transparent,
+          radius: 48.0,
+          child: Image.network("https://www.clipartwiki.com/clipimg/full/13-133005_construction-clipart-curriculum-under-construction-png.png"),
+        ),
+      ),
+    );
+  }
 
   Widget showEmailInput() {
     return Padding(
@@ -218,10 +226,10 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
             elevation: 5.0,
             shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(30.0)),
-            color: Colors.blue,
+            color: Colors.redAccent,
             child: new Text(_isLoginForm ? 'Login' : 'Create account',
                 style: new TextStyle(fontSize: 20.0, color: Colors.white)),
-            onPressed: validateAndSubmit,
+            onPressed: validateAndSubmit
           ),
         ));
   }

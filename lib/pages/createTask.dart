@@ -6,6 +6,9 @@ import 'package:tul_mobileapp/constants.dart';
 import 'package:tul_mobileapp/objects/task.dart';
 import 'package:tul_mobileapp/logic/rest_api.dart';
 import 'package:flutter_tags/tag.dart';
+import 'package:tul_mobileapp/pages/chat.dart';
+
+import 'myTasks.dart';
 
 class NewTask extends StatefulWidget {
   @override
@@ -41,11 +44,8 @@ class _NewTaskState extends State<NewTask> {
               currentlyLoggedUser.phoneNumber,
               currentlyLoggedUser.email);
           await fetchDataFromDB();
+          tags.clear();
           setState(() {
-//            taskList.add(Task(
-//                title: titleValue,
-//                description: description,
-//                tags: tags));
           });
         },
       ),
@@ -67,17 +67,19 @@ class _NewTaskState extends State<NewTask> {
             ),
             TextField(
               decoration: InputDecoration(labelText: 'Description'),
-              maxLines: 4,
+              maxLines: 3,
               onChanged: (String value) {
                 setState(() {
                   description = value;
                 });
               },
             ),
+            SizedBox(height: 10,),
             Tags(
               key: tagStateKey,
-              textField: TagsTextFiled(
-                textStyle: TextStyle(fontSize: 10),
+              textField: TagsTextField(
+                inputDecoration: InputDecoration(labelText: 'Tags'),
+                textStyle: TextStyle(fontSize: 12),
                 onSubmitted: (String str) {
                   // Add item to the data source.
                   setState(() {

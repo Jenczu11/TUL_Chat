@@ -91,7 +91,7 @@
 //              shape: StadiumBorder(),
 //              child: Text("Log In"),
 //              onPressed: () async {
-//                showProcessingDialog(context, "Signing in...");
+//
 //                await _signIn(phoneNumberController.text);
 //                await fetchDataFromDB();
 //                Navigator.of(context).pop();

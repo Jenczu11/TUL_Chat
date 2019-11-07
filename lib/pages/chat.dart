@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:tul_mobileapp/constants.dart';
 import 'package:tul_mobileapp/logic/rest_api.dart';
+import 'package:tul_mobileapp/objects/task.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Chat extends StatefulWidget {
@@ -51,23 +52,24 @@ class TileItem extends StatelessWidget {
           children: <Widget>[
             Column(
               children: <Widget>[
-                 AspectRatio(
-                   aspectRatio: 485.0 / 384.0,
-                   child: Image.network("https://picsum.photos/485/384?image=$num"),
-                 ),
+                AspectRatio(
+                  aspectRatio: 485.0 / 384.0,
+                  child:
+                      Image.network("https://picsum.photos/485/384?image=$num"),
+                ),
                 Material(
                   child: ListTile(
                     leading: Icon(Icons.album),
                     title: Text(taskList[num].title),
-                  subtitle: Text(tagsToString(taskList[num])),
-                ),
+                    subtitle: Text("Tags : " + tagsToString(taskList[num])),
+                  ),
                 ),
                 ButtonTheme.bar(
                   // make buttons use the appropriate styles for cards
                   child: ButtonBar(
                     children: <Widget>[
                       FlatButton(
-                        child: const Text('Pomagam'),
+                        child: const Text('Click for more details'),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -153,8 +155,8 @@ class PageItem extends StatelessWidget {
               InkWell(
                 child: Material(
                   child: ListTile(
-                    title: Text(taskList[num].title),
-                    subtitle: Text(taskList[num].phoneNumber),
+                    title: Text("Title : "+taskList[num].title),
+                    subtitle: Text("Phone number : "+taskList[num].phoneNumber),
                   ),
                 ),
                 onTap: () => Navigator.of(context).pop(),
@@ -163,31 +165,77 @@ class PageItem extends StatelessWidget {
               Expanded(
                 child: Container(
                   child: Column(children: <Widget>[
-                    new Center(child: Text(taskList[num].description)),
-                    FlatButton.icon(
-                      label: Text("Call me"),
-                      icon: Icon(Icons.phone_in_talk,color: Colors.green,),
-                      onPressed: (() async {
-                        await launch("tel:${taskList[num].phoneNumber}");
-                      }),
+                    new Center(
+                        child:
+                            Text("Description :" + taskList[num].description)),
+                    Text("Date added :" + taskList[num].dateAdded.toString()),
+                    Image.network(
+                      "https://picsum.photos/485/384?image=$num",
+                      height: 300,
                     ),
-                    FlatButton.icon(
-                      label: Text("Mail me"),
-                      icon: Icon(Icons.mail,color: Colors.redAccent,),
-                      onPressed: (() async {
-                        await launch("mailto:${taskList[num].email}");
-                      }),
+                    Visibility(
+                      visible:taskList[num].isAssigned,
+                      child: Column(children: <Widget>[
+                        Text("User assigned :" + taskList[num].userAssigned),
+                        Text("Date assigned :" + taskList[num].dateAssigned)
+                      ],),
+                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Visibility(
+                          visible:
+                              phoneNumberVisibility(taskList[num].phoneNumber),
+                          child: FlatButton.icon(
+                            label: Text("Call me"),
+                            icon: Icon(
+                              Icons.phone_in_talk,
+                              color: Colors.green,
+                            ),
+                            onPressed: (() async {
+                              await launch("tel:${taskList[num].phoneNumber}");
+                            }),
+                          ),
+                        ),
+                        FlatButton.icon(
+                          label: Text("Mail me"),
+                          icon: Icon(
+                            Icons.mail,
+                            color: Colors.redAccent,
+                          ),
+                          onPressed: (() async {
+                            await launch("mailto:${taskList[num].email}");
+                          }),
+                        ),
+                      ],
                     ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Visibility(
+                            visible: acceptButtonVisibility(taskList[num]),
+                            child: FlatButton.icon(
+                              label: Text("Accept"),
+                              icon: Icon(
+                                Icons.check,
+                                color: Colors.greenAccent,
+                              ),
+                              onPressed: (() async {
+                                await assignUserToTask(
+                                    taskList[num].id, currentlyLoggedUser.id);
+                                Navigator.of(context).pop();
+                              }),
+                            ),
+                          ),
+                        ]),
                     new Expanded(
                         child: new Container(
                       child: new Align(
                         alignment: Alignment.bottomRight,
-                        child: new FlatButton(
-                          child: Text('Bottom'),
-                          onPressed: () => {
-                            //TODO: Na wcisnieciu usun odpowiednia karte z bazy
-                            print("Wcisnalem przycisk bottom")
-                          },
+                        child: new FlatButton.icon(
+                          icon: Icon(Icons.arrow_back),
+                          label: Text(''),
+                          onPressed: () => {Navigator.of(context).pop()},
                         ),
                       ),
                       padding: EdgeInsets.only(bottom: 24),
@@ -195,18 +243,6 @@ class PageItem extends StatelessWidget {
                   ]),
                 ),
               ),
-
-              //      ButtonTheme.bar( // make buttons use the appropriate styles for cards
-              //   child: ButtonBar(
-              //     children: <Widget>[
-              //       FlatButton(
-              //         child: const Text('Pomagam'),
-              //         onPressed: () { },
-              //       ),
-
-              //     ],
-              //   ),
-              // ),
             ],
           ),
         ),
@@ -224,4 +260,20 @@ class PageItem extends StatelessWidget {
       ),
     ]);
   }
+
+  bool phoneNumberVisibility(String phoneNumber) {
+    if (phoneNumber == "") {
+      return false;
+    } else
+      return true;
+  }
+
+  acceptButtonVisibility(Task task) {
+    if(task.isAssigned == false){
+      return true;
+    }
+    else return false;
+  }
+
+
 }
