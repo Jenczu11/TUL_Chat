@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tul_mobileapp/logic/authentication.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 class Settings extends StatefulWidget {
 
   Settings({Key key, this.auth, this.userId, this.logoutCallback})
@@ -20,10 +20,12 @@ class _SettingsState extends State<Settings> {
       appBar: AppBar(
         title: Text('Settings'),
       ),
-       body: ListView(
-         children: <Widget>[
-         ],
-       ),
+        body: new Center(
+          child: new InkWell(
+              child: new Text('Open Browser'),
+              onTap: () => launch('https://www.youtube.com/watch?v=oHg5SJYRHA0')
+          ),
+        ),
     );
   }
 }
