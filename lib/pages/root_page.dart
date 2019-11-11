@@ -25,6 +25,8 @@ class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String userId;
   String userEmail;
+  String userDisplayName;
+  String userPhoneNumber; 
 
   @override
   void initState() {
@@ -34,6 +36,8 @@ class _RootPageState extends State<RootPage> {
         if (user != null) {
           userId = user?.uid;
           userEmail = user?.email;
+          // userDisplayName = user?.displayName;
+          // userPhoneNumber = user?.phoneNumber;
         }
         authStatus =
         user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
@@ -98,6 +102,8 @@ class _RootPageState extends State<RootPage> {
           print("LOGGED IN");
           print("userId :"+userId);
           print("userEmail :"+userEmail);
+          // print("userPhoneNumber :"+userPhoneNumber);
+          // print("userDisplayName :"+userDisplayName);
           print("currentlyLoggedUser: ");
           print(currentlyLoggedUser);
           print("----------------------------------");
