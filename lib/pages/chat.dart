@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/semantics.dart';
 import 'package:tul_mobileapp/constants.dart';
 import 'package:tul_mobileapp/logic/rest_api.dart';
 import 'package:tul_mobileapp/objects/task.dart';
@@ -8,27 +9,92 @@ import 'package:url_launcher/url_launcher.dart';
 class Chat extends StatefulWidget {
   @override
   _ChatState createState() => _ChatState();
+
 }
 
 class _ChatState extends State<Chat> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
+    @override
+  void initState(){
+    print("--------Chat initState-------");
+    super.initState();
+    //  WidgetsBinding.instance
+        // .addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
+    // fetchDataFromDB();
+  }
   @override
-  Widget build(BuildContext context) { 
-    return MaterialApp(
-      home: Scaffold(
+  Widget build(BuildContext context) {
+     print("TaskListLength: "+taskList.length.toString());
+    if(taskList == null || taskList.length<1)
+    {
+      return Scaffold(
+          appBar: AppBar(
+            title: Text("Pending help requests"),
+            backgroundColor: Colors.deepPurple,
+          ),
+          body: RefreshIndicator(
+            key: _refreshIndicatorKey,
+            onRefresh: _refresh,
+            child: ListView(children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 24.0),
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                   Text("Some minion kidnapped your data", textScaleFactor: 1.5,),
+                   Image.asset("assets/minion.png"),
+                   Text("Try pulling to refresh",textScaleFactor: 2,)
+                    
+                  ],
+                ),
+              ),
+            )
+          ])),
+            );
+    }
+    else
+  //   return (
+  //   child: RefreshIndicator(
+  //           key: _refreshIndicatorKey,
+  //           onRefresh: _refresh,
+  //           child: ListView.builder(
+  //           itemBuilder: (_, index) => TileItem(num: index),
+  //           itemCount: taskList.length,
+  //         )));
+  // }
+    return Scaffold(
           appBar: AppBar(
             title: Text("Pending help requests"),
             backgroundColor: Colors.deepPurple,
           ),
           // body: TileItem(num: )
-          body: ListView(
-            children: new List.generate(
-              taskList.length,
-              (int index) {
-                return TileItem(num: index);
-              },
-            ),
-          )),
-    );
+          // body: ListView(
+          //   children: new List.generate(
+          //     taskList.length,
+          //     (int index) {
+          //       return TileItem(num: index);
+          //     },
+          //   ),
+          // )
+          body: RefreshIndicator(
+            key: _refreshIndicatorKey,
+            onRefresh: _refresh,
+            child: ListView.builder(
+            itemBuilder: (_, index) => TileItem(num: index),
+            itemCount: taskList.length,
+            
+          ),
+          ));
+  }
+  
+  
+
+  Future<Null> _refresh() {
+    setState(() {
+    
+    });
+    return fetchDataFromDB();
   }
 }
 

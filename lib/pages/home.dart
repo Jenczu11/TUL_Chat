@@ -19,12 +19,15 @@ class Home extends StatefulWidget {
   String userEmail;
   @override
   _HomeState createState() => _HomeState();
-  
 }
 
 class _HomeState extends State<Home> {
-
-
+   @override 
+  void initState(){
+    print("----- home init State -----");
+    // fetchDataFromDB();
+    super.initState();
+  }
   // Properties & Variables needed
   //var currentColor = Color.fromRGBO(231, 129, 109, 1.0);
   int currentTab = 0; // to keep track of active tab index
@@ -40,7 +43,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-  fetchDataFromDB();  
+    // WidgetsBinding.instance.addPostFrameCallback((_) => onAfterBuild(context));
     return Scaffold(
       drawer: Drawer(
         child: ListView(
@@ -199,6 +202,11 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+  void onAfterBuild(BuildContext context){
+  currentScreen = Chat();
+  currentScreen = Profile();
+  currentScreen = Chat();
+}
 
   signOut() async {
     try {
