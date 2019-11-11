@@ -60,7 +60,7 @@ class _HomeState extends State<Home> {
         bucket: bucket,
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.drafts),
+        child: Icon(Icons.add),
         
         onPressed: () {
           setState(() {
