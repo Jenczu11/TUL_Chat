@@ -25,6 +25,8 @@ class _ChatState extends State<Chat> {
   }
   @override
   Widget build(BuildContext context) {
+    final _width = MediaQuery.of(context).size.width;
+    final _height = MediaQuery.of(context).size.height;
      print("TaskListLength: "+taskList.length.toString());
     if(taskList == null || taskList.length<1)
     {
@@ -42,9 +44,24 @@ class _ChatState extends State<Chat> {
               child: Center(
                 child: Column(
                   children: <Widget>[
-                   Text("Some minion kidnapped your data", textScaleFactor: 1.5,),
-                   Image.asset("assets/minion.png"),
-                   Text("Try pulling to refresh",textScaleFactor: 2,)
+                    SizedBox(
+                    height: _height*0.05,
+                    width: _width,
+                    child: Text("Some minion kidnapped your data", textScaleFactor: 1.8, textAlign: TextAlign.center,),
+                  ),
+                             
+                     SizedBox(
+                    height: _height*0.6,
+                    child:  Image.asset("assets/minion.png"),
+                    ),
+                  Padding(
+                    padding: new EdgeInsets.only(
+                        top: _height / 30, left: _width / 8, right: _width / 8)),
+
+                    SizedBox(
+                    height: _height*0.1,
+                    child:  Text("Try pulling to refresh",textScaleFactor: 2,),
+                  ),
                     
                   ],
                 ),
