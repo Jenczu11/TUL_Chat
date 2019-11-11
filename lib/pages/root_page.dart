@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-
+import 'package:tul_mobileapp/logic/rest_api.dart';
+import 'package:tul_mobileapp/constants.dart';
 import '../logic/authentication.dart';
 import 'home.dart';
 import 'login_singup_page.dart';
+import 'package:tul_mobileapp/objects/user.dart';
 
 enum AuthStatus {
   NOT_DETERMINED,
@@ -21,7 +23,8 @@ class RootPage extends StatefulWidget {
 
 class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
-  String userId = "";
+  String userId;
+  String userEmail;
 
   @override
   void initState() {
@@ -30,6 +33,7 @@ class _RootPageState extends State<RootPage> {
       setState(() {
         if (user != null) {
           userId = user?.uid;
+          userEmail = user?.email;
         }
         authStatus =
         user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
@@ -41,6 +45,9 @@ class _RootPageState extends State<RootPage> {
     widget.auth.getCurrentUser().then((user) {
       setState(() {
         userId = user.uid.toString();
+        userEmail = user.email.toString();
+        print("userId: "+userId);
+        print("userEmail: "+userEmail);
       });
     });
     setState(() {
@@ -52,6 +59,7 @@ class _RootPageState extends State<RootPage> {
     setState(() {
       authStatus = AuthStatus.NOT_LOGGED_IN;
       userId = "";
+      userEmail = "";
     });
   }
 
@@ -68,21 +76,46 @@ class _RootPageState extends State<RootPage> {
   Widget build(BuildContext context) {
     switch (authStatus) {
       case AuthStatus.NOT_DETERMINED:
+      {
+        print("Not Determined");
         return buildWaitingScreen();
-        break;
+        
+      }break;
       case AuthStatus.NOT_LOGGED_IN:
+      {
+      print("Not Logged");
         return new LoginSignupPage(
           auth: widget.auth,
           loginCallback: loginCallback,
         );
-        break;
+        
+      }
+      break;
       case AuthStatus.LOGGED_IN:
-        if (userId.length > 0 && userId != null) {
+      if(userId != null){
+        if (userId.length > 0) {
+          print("----------------------------------");
+          print("LOGGED IN");
+          print("userId :"+userId);
+          print("userEmail :"+userEmail);
+          print("currentlyLoggedUser: ");
+          print(currentlyLoggedUser);
+          print("----------------------------------");
+          if(currentlyLoggedUser == null)
+          {
+            print("Brak current tworze");
+          currentlyLoggedUser = new User(id: userId, email: userEmail.toString(), name:  "", phoneNumber: "");
+          // fetchDataFromDB();
+          }
+          print("Current jest wiec lece daleeej");
+          // fetchDataFromDB();
           return new Home(
             userId: userId,
+            userEmail: userEmail,
             auth: widget.auth,
             logoutCallback: logoutCallback,
           );
+        }
         } else
           return buildWaitingScreen();
         break;

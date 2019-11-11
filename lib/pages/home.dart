@@ -1,24 +1,28 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tul_mobileapp/logic/authentication.dart';
+import 'package:tul_mobileapp/logic/rest_api.dart';
 import 'package:tul_mobileapp/pages/myTasks.dart';
 import 'package:tul_mobileapp/pages/profile.dart';
 import 'package:tul_mobileapp/pages/settings.dart';
+import 'package:tul_mobileapp/constants.dart';
 
 import 'chat.dart';
 import 'createTask.dart';
 class Home extends StatefulWidget {
-  Home({Key key, this.auth, this.userId, this.logoutCallback})
+  Home({Key key, this.auth, this.userId, this.userEmail, this.logoutCallback})
       : super(key: key);
 
   BaseAuth auth;
   VoidCallback logoutCallback;
   String userId;
+  String userEmail;
   @override
   _HomeState createState() => _HomeState();
+  
 }
 
 class _HomeState extends State<Home> {
-
 
 
   // Properties & Variables needed
@@ -34,12 +38,9 @@ class _HomeState extends State<Home> {
   final PageStorageBucket bucket = PageStorageBucket();
   Widget currentScreen = Chat();
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
+  fetchDataFromDB();  
     return Scaffold(
       drawer: Drawer(
         child: ListView(
@@ -82,6 +83,7 @@ class _HomeState extends State<Home> {
                   MaterialButton(
                     minWidth: 40,
                     onPressed: () {
+                      // fetchDataFromDB();
                       setState(() {
                         currentScreen =
                             Chat(); // if user taps on this dashboard tab will be active

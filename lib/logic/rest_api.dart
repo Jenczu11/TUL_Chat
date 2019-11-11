@@ -13,6 +13,10 @@ List<Task> taskList = new List<Task>();
 List<Task> myTasks = new List<Task>();
 
 Future<Null> fetchDataFromDB() async{
+  print("-------------------------");
+  print("Fetching from DB");
+  print("User Email: "+currentlyLoggedUser.email);
+  print("-------------------------");
   final url = "https://lut-mobileapp.firebaseio.com/tasks.json";
   try{
     final response = await http.get(url);
@@ -21,6 +25,7 @@ Future<Null> fetchDataFromDB() async{
     final List<Task> loadedTasks = [];
     final List<Task> myLoadedTasks = [];
     if(extractedData!= null) {
+      // print(currentlyLoggedUser.email);
       extractedData.forEach((taskId, taskData) {
        // if((taskData['email']!=currentlyLoggedUser.email) && (taskData['isAssigned'] == false)){
         if((taskData['email']!=currentlyLoggedUser.email)){

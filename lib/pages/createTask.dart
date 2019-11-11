@@ -77,7 +77,7 @@ class _NewTaskState extends State<NewTask> {
             SizedBox(height: 10,),
             Tags(
               key: tagStateKey,
-              textField: TagsTextField(
+              textField: TagsTextFiled(
                 inputDecoration: InputDecoration(labelText: 'Tags'),
                 textStyle: TextStyle(fontSize: 12),
                 onSubmitted: (String str) {

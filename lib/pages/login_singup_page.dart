@@ -51,7 +51,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
           currentlyLoggedUser = new User(id: userId, email: _email, name:  "", phoneNumber: "");
           await signIn(_email);
           await fetchDataFromDB();
-          print(currentlyLoggedUser.toString());
+          // print(currentlyLoggedUser.toString());
         } else {
           userId = await widget.auth.signUp(_email, _password);
           //widget.auth.sendEmailVerification();

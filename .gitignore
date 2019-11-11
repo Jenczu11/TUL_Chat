@@ -28,3 +28,7 @@ android/local.properties
 .flutter-plugins
 
 android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
+
+android/.gradle/
+.gradle
+
