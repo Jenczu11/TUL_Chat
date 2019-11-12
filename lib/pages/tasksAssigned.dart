@@ -6,109 +6,39 @@ import 'package:tul_mobileapp/logic/rest_api.dart';
 import 'package:tul_mobileapp/objects/task.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Chat extends StatefulWidget {
+class TaskAssigned extends StatefulWidget {
   @override
-  _ChatState createState() => _ChatState();
+  _TaskAssignedState createState() => _TaskAssignedState();
 
 }
 
-class _ChatState extends State<Chat> {
+class _TaskAssignedState extends State<TaskAssigned> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
     @override
   void initState(){
-    print("--------Chat initState-------");
+    print("--------taskAssigned initState-------");
     super.initState();
+    
     //  WidgetsBinding.instance
         // .addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
-    // fetchDataFromDB();
+    fetchDataFromDB();
   }
   @override
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
-     print("TaskListLength: "+taskList.length.toString());
-    if(taskList == null || taskList.length<1)
-    {
+     print("taskListAssigned: "+taskListAssigned.length.toString());
       return Scaffold(appBar: AppBar(
             title: Text("Pending help requests"),
             backgroundColor: Colors.deepPurple,
           ),
-      body: FutureBuilder<List<Task>>(
-        future: fetchDataFromDB(),
-      builder: (context,snapshot){
-        if (snapshot.hasData)
-        {
-          print(snapshot.data.toString());
-          return new ListView.builder(
+          body:  ListView.builder(
             itemBuilder: (_, index) => TileItem(num: index),
-            itemCount: snapshot.data.length,
+            itemCount: taskListAssigned.length,     
+          ),
           );
-        }
-        else if (snapshot.hasError){
-          return new Text("${snapshot.error}");
-        }
-        return ListView(children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 24.0),
-              child: Center(
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                    height: _height*0.05,
-                    width: _width,
-                    child: Text("Some minion kidnapped your data", textScaleFactor: 1.8, textAlign: TextAlign.center,),
-                  ),
-                             
-                     SizedBox(
-                    height: _height*0.6,
-                    child:  Image.asset("assets/minion.png"),
-                    ),
-                  Padding(
-                    padding: new EdgeInsets.only(
-                        top: _height / 30, left: _width / 8, right: _width / 8)),
-
-                    SizedBox(
-                    height: _height*0.1,
-                    child:  Text("Try pulling to refresh",textScaleFactor: 2,),
-                  ),
-                    
-                  ],
-                ),
-              ),
-            )
-          ]);
-      }
-      ,)
-      ,);
-    }
-    else
-  //   return (
-  //   child: RefreshIndicator(
-  //           key: _refreshIndicatorKey,
-  //           onRefresh: _refresh,
-  //           child: ListView.builder(
-  //           itemBuilder: (_, index) => TileItem(num: index),
-  //           itemCount: taskList.length,
-  //         )));
-  // }
-    return Scaffold(
-          appBar: AppBar(
-            title: Text("Pending help requests"),
-            backgroundColor: Colors.deepPurple,
-          ),
-          body: RefreshIndicator(
-            key: _refreshIndicatorKey,
-            onRefresh: _refresh,
-            child: ListView.builder(
-            itemBuilder: (_, index) => TileItem(num: index),
-            itemCount: taskList.length,
-            
-          ),
-          ));
   }
-  
-  
 
   Future<List<Task>> _refresh() {
     setState(() {
@@ -146,8 +76,8 @@ class TileItem extends StatelessWidget {
                 Material(
                   child: ListTile(
                     leading: Icon(Icons.album),
-                    title: Text(taskList[num].title),
-                    subtitle: Text("Tags : " + tagsToString(taskList[num])),
+                    title: Text(taskListAssigned[num].title),
+                    subtitle: Text("Tags : " + tagsToString(taskListAssigned[num])),
                   ),
                 ),
                 ButtonTheme.bar(
@@ -207,9 +137,10 @@ class PageItem extends StatelessWidget {
   final int num;
 
   const PageItem({Key key, this.num}) : super(key: key);
-
+ 
   @override
   Widget build(BuildContext context) {
+     print("User assigned : "+taskListAssigned[num].userAssigned);
     timeDilation = 1.0;
     AppBar appBar = new AppBar(
       primary: true,
@@ -218,7 +149,6 @@ class PageItem extends StatelessWidget {
       backgroundColor: Colors.transparent,
     );
     final MediaQueryData mediaQuery = MediaQuery.of(context);
-
     return Stack(children: <Widget>[
       Hero(
         tag: "card$num",
@@ -241,8 +171,8 @@ class PageItem extends StatelessWidget {
               InkWell(
                 child: Material(
                   child: ListTile(
-                    title: Text("Title : "+taskList[num].title),
-                    subtitle: Text("Phone number : "+taskList[num].phoneNumber),
+                    title: Text("Title : "+taskListAssigned[num].title),
+                    subtitle: Text("Phone number : "+taskListAssigned[num].phoneNumber),
                   ),
                 ),
                 onTap: () => Navigator.of(context).pop(),
@@ -253,17 +183,17 @@ class PageItem extends StatelessWidget {
                   child: Column(children: <Widget>[
                     new Center(
                         child:
-                            Text("Description :" + taskList[num].description)),
-                    Text("Date added :" + taskList[num].dateAdded.toString()),
+                            Text("Description :" + taskListAssigned[num].description)),
+                    Text("Date added :" + taskListAssigned[num].dateAdded.toString()),
                     Image.network(
                       "https://picsum.photos/485/384?image=$num",
                       height: 300,
                     ),
                     Visibility(
-                      visible:taskList[num].isAssigned,
+                      visible:taskListAssigned[num].isAssigned,
                       child: Column(children: <Widget>[
-                        Text("User assigned :" + taskList[num].userAssigned),
-                        Text("Date assigned :" + taskList[num].dateAssigned)
+                        Text("User assigned :" + taskListAssigned[num].userAssigned),
+                        Text("Date assigned :" + taskListAssigned[num].dateAssigned)
                       ],),
                       ),
                     Row(
@@ -271,7 +201,7 @@ class PageItem extends StatelessWidget {
                       children: <Widget>[
                         Visibility(
                           visible:
-                              phoneNumberVisibility(taskList[num].phoneNumber),
+                              phoneNumberVisibility(taskListAssigned[num].phoneNumber),
                           child: FlatButton.icon(
                             label: Text("Call me"),
                             icon: Icon(
@@ -279,7 +209,7 @@ class PageItem extends StatelessWidget {
                               color: Colors.green,
                             ),
                             onPressed: (() async {
-                              await launch("tel:${taskList[num].phoneNumber}");
+                              await launch("tel:${taskListAssigned[num].phoneNumber}");
                             }),
                           ),
                         ),
@@ -290,7 +220,7 @@ class PageItem extends StatelessWidget {
                             color: Colors.redAccent,
                           ),
                           onPressed: (() async {
-                            await launch("mailto:${taskList[num].email}");
+                            await launch("mailto:${taskListAssigned[num].email}");
                           }),
                         ),
                       ],
@@ -299,7 +229,7 @@ class PageItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Visibility(
-                            visible: acceptButtonVisibility(taskList[num]),
+                            visible: acceptButtonVisibility(taskListAssigned[num]),
                             child: FlatButton.icon(
                               label: Text("Accept"),
                               icon: Icon(
@@ -308,7 +238,7 @@ class PageItem extends StatelessWidget {
                               ),
                               onPressed: (() async {
                                 await assignUserToTask(
-                                    taskList[num].id, currentlyLoggedUser.email);
+                                    taskListAssigned[num].id, currentlyLoggedUser.id);
                                 Navigator.of(context).pop();
                               }),
                             ),

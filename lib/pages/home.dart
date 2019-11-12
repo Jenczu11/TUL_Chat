@@ -6,6 +6,7 @@ import 'package:tul_mobileapp/pages/myTasks.dart';
 import 'package:tul_mobileapp/pages/profile.dart';
 import 'package:tul_mobileapp/pages/settings.dart';
 import 'package:tul_mobileapp/constants.dart';
+import 'package:tul_mobileapp/pages/tasksAssigned.dart';
 
 import 'chat.dart';
 import 'createTask.dart';
@@ -37,6 +38,7 @@ class _HomeState extends State<Home> {
     Profile(),
     Settings(),
     NewTask(),
+    TaskAssigned(),
   ]; // to store nested tabs
   final PageStorageBucket bucket = PageStorageBucket();
   Widget currentScreen = Chat();
@@ -173,7 +175,7 @@ class _HomeState extends State<Home> {
                     onPressed: () {
                       setState(() {
                         currentScreen =
-                            Settings(); // if user taps on this dashboard tab will be active
+                            TaskAssigned(); // if user taps on this dashboard tab will be active
                         currentTab = 3;
                       });
                     },

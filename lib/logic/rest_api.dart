@@ -11,6 +11,7 @@ import '../objects/user.dart';
 
 List<Task> taskList = new List<Task>();
 List<Task> myTasks = new List<Task>();
+List<Task> taskListAssigned = new List<Task>();
 
 Future<List<Task>> fetchDataFromDB() async{
   print("-------------------------");
@@ -24,9 +25,11 @@ Future<List<Task>> fetchDataFromDB() async{
 
     final List<Task> loadedTasks = [];
     final List<Task> myLoadedTasks = [];
+    final List<Task> taskListLoadedAssigned =[];
     if(extractedData!= null) {
       // print(currentlyLoggedUser.email);
       extractedData.forEach((taskId, taskData) {
+       
        // if((taskData['email']!=currentlyLoggedUser.email) && (taskData['isAssigned'] == false)){
         if((taskData['email']!=currentlyLoggedUser.email)){
         loadedTasks.add(Task(
@@ -37,12 +40,28 @@ Future<List<Task>> fetchDataFromDB() async{
             email: taskData['email'],
             phoneNumber: taskData['phoneNumber'],
             isAssigned: taskData['isAssigned'],
-            userAssigned: taskData['name'],
+            userAssigned: taskData['userAssigned'],
             dateAdded: taskData['dataAdded'],
             dateAssigned: taskData['dateAssigned']
         ));
         }
-        else{
+        if((taskData['userAssigned'] == prefix0.currentlyLoggedUser.email))
+          {
+            print("W petli");
+          taskListLoadedAssigned.add(Task(
+              id: taskId,
+              title: taskData['title'],
+              description: taskData['description'],
+              tags: taskData['tags'],
+              email: taskData['email'],
+              phoneNumber: taskData['phoneNumber'],
+              isAssigned: taskData['isAssigned'],
+              userAssigned: taskData['userAssigned'],
+              dateAdded: taskData['dataAdded'],
+              dateAssigned: taskData['dateAssigned']
+          ));
+        }
+         if((taskData['email']==currentlyLoggedUser.email)){
           myLoadedTasks.add(Task(
               id: taskId,
               title: taskData['title'],
@@ -51,13 +70,16 @@ Future<List<Task>> fetchDataFromDB() async{
               email: taskData['email'],
               phoneNumber: taskData['phoneNumber'],
               isAssigned: taskData['isAssigned'],
-              userAssigned: taskData['name'],
+              userAssigned: taskData['userAssigned'],
               dateAdded: taskData['dataAdded'],
               dateAssigned: taskData['dateAssigned']
           ));
+          // print(prefix0.currentlyLoggedUser.id);
         }
+          
       });
     }
+    taskListAssigned = taskListLoadedAssigned;
     taskList = loadedTasks;
     myTasks = myLoadedTasks;
     return taskList;
