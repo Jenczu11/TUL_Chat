@@ -30,15 +30,25 @@ class _ChatState extends State<Chat> {
      print("TaskListLength: "+taskList.length.toString());
     if(taskList == null || taskList.length<1)
     {
-      return Scaffold(
-          appBar: AppBar(
+      return Scaffold(appBar: AppBar(
             title: Text("Pending help requests"),
             backgroundColor: Colors.deepPurple,
           ),
-          body: RefreshIndicator(
-            key: _refreshIndicatorKey,
-            onRefresh: _refresh,
-            child: ListView(children: [
+      body: FutureBuilder<List<Task>>(
+        future: fetchDataFromDB(),
+      builder: (context,snapshot){
+        if (snapshot.hasData)
+        {
+          print(snapshot.data.toString());
+          return new ListView.builder(
+            itemBuilder: (_, index) => TileItem(num: index),
+            itemCount: snapshot.data.length,
+          );
+        }
+        else if (snapshot.hasError){
+          return new Text("${snapshot.error}");
+        }
+        return ListView(children: [
             Padding(
               padding: const EdgeInsets.only(top: 24.0),
               child: Center(
@@ -67,8 +77,10 @@ class _ChatState extends State<Chat> {
                 ),
               ),
             )
-          ])),
-            );
+          ]);
+      }
+      ,)
+      ,);
     }
     else
   //   return (
@@ -85,15 +97,6 @@ class _ChatState extends State<Chat> {
             title: Text("Pending help requests"),
             backgroundColor: Colors.deepPurple,
           ),
-          // body: TileItem(num: )
-          // body: ListView(
-          //   children: new List.generate(
-          //     taskList.length,
-          //     (int index) {
-          //       return TileItem(num: index);
-          //     },
-          //   ),
-          // )
           body: RefreshIndicator(
             key: _refreshIndicatorKey,
             onRefresh: _refresh,
@@ -107,7 +110,7 @@ class _ChatState extends State<Chat> {
   
   
 
-  Future<Null> _refresh() {
+  Future<List<Task>> _refresh() {
     setState(() {
     
     });

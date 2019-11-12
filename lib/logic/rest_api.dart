@@ -12,7 +12,7 @@ import '../objects/user.dart';
 List<Task> taskList = new List<Task>();
 List<Task> myTasks = new List<Task>();
 
-Future<Null> fetchDataFromDB() async{
+Future<List<Task>> fetchDataFromDB() async{
   print("-------------------------");
   print("Fetching from DB");
   print("User Email: "+currentlyLoggedUser.email);
@@ -60,6 +60,7 @@ Future<Null> fetchDataFromDB() async{
     }
     taskList = loadedTasks;
     myTasks = myLoadedTasks;
+    return taskList;
   } catch(error){
     throw (error);
   }
