@@ -89,9 +89,10 @@ Future<Null> postDataToDB(String titleValue, String description, List<dynamic> t
 }
 
 
-Future<Null> patchDataDB(String userId,String _name, String _phoneNumber) async{
-  print(userId);
-  final url = "https://lut-mobileapp.firebaseio.com/users/${userId}/.json";
+
+Future<Null> patchDataDB(String dbId,String _name, String _phoneNumber) async{
+  print(dbId);
+  final url = "https://lut-mobileapp.firebaseio.com/users/${dbId}/.json";
   http.patch(url, body: json.encode({
     "phoneNumber" : _phoneNumber,
     "name" : _name,
@@ -128,7 +129,10 @@ Future<Null> signIn(String _email) async{
     if(extractedData!=null) {
       extractedData.forEach((userId, userData) {
         print(userData['email'].toString());
-        if (userData['email'].toString() == _email) {
+        if ((userData['email'].toString() == _email)) {
+          currentlyLoggedUser.dbId =userId;
+          currentlyLoggedUser.name = userData['name'];
+          currentlyLoggedUser.phoneNumber = userData['phoneNumber'];
           _exists = true;
           print("Already exists - do nothing ");
         }
@@ -143,7 +147,9 @@ Future<Null> signIn(String _email) async{
       "phoneNumber" : "",
       "name" : "",
       "email" : _email
-    }));
+    })).then((response) {
+      print(response);
+    });
   }
 
 }

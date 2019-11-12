@@ -64,7 +64,7 @@ class _EditProfileState extends State<EditProfile> {
           _phoneNumber,
           SizedBox(height: MediaQuery.of(context).size.height*0.25,),
           FlatButton.icon(onPressed: (() async {
-            await patchDataDB(currentlyLoggedUser.id,nameController.text,phoneNumberController.text);
+            await patchDataDB(currentlyLoggedUser.dbId,nameController.text,phoneNumberController.text);
           }), icon: Icon(Icons.send), label: Text("Update"))
 
 

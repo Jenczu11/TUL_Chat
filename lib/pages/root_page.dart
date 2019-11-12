@@ -24,6 +24,7 @@ class RootPage extends StatefulWidget {
 class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String userId;
+  String dbId;
   String userEmail;
   String userDisplayName;
   String userPhoneNumber; 
@@ -36,8 +37,8 @@ class _RootPageState extends State<RootPage> {
         if (user != null) {
           userId = user?.uid;
           userEmail = user?.email;
-          // userDisplayName = user?.displayName;
-          // userPhoneNumber = user?.phoneNumber;
+          userDisplayName = user?.displayName;
+          userPhoneNumber = user?.phoneNumber;
         }
         authStatus =
         user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
@@ -97,13 +98,14 @@ class _RootPageState extends State<RootPage> {
       break;
       case AuthStatus.LOGGED_IN:
       if(userId != null){
+        signIn(userEmail);
         if (userId.length > 0) {
           print("----------------------------------");
           print("LOGGED IN");
           print("userId :"+userId);
           print("userEmail :"+userEmail);
-          // print("userPhoneNumber :"+userPhoneNumber);
-          // print("userDisplayName :"+userDisplayName);
+         // print("userPhoneNumber :"+userPhoneNumber);
+         // print("userDisplayName :"+userDisplayName);
           print("currentlyLoggedUser: ");
           print(currentlyLoggedUser);
           print("----------------------------------");
