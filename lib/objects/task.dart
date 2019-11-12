@@ -3,11 +3,13 @@ class Task{
   final String title;
   final String description;
   final List<dynamic> tags;
-  final bool isDone;
-  final String userAssigned;
+  bool isAssigned;
+  final String dateAdded;
+  String dateAssigned;
+  String userAssigned;
   final String email;
-  final String phoneNumber;
+  String phoneNumber;
 
-  Task({this.id,this.title,this.description,this.tags,this.isDone,this.userAssigned,this.email,this.phoneNumber});
+  Task({this.id,this.title,this.description,this.tags,this.isAssigned,this.userAssigned,this.email,this.phoneNumber,this.dateAdded,this.dateAssigned});
 
 }

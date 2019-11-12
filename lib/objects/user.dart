@@ -1,10 +1,11 @@
 class User{
-  final String id;
+  String id;
+  String dbId;
   String phoneNumber;
   String name;
   String email;
 
 
-  User({this.id,this.phoneNumber,this.name,this.email,});
+  User({this.id,this.dbId,this.phoneNumber,this.name,this.email,});
 
 }

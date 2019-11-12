@@ -52,26 +52,6 @@ class _EditProfileState extends State<EditProfile> {
     ),
   );
 
-  final _email = Padding(
-    padding: EdgeInsets.all(5),
-    child: TextFormField(
-      style: TextStyle(color: Colors.black),
-      keyboardType: TextInputType.text,
-      controller: emailAddressController,
-      autofocus: false,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black, width: 0.0),
-            borderRadius: BorderRadius.circular(32.0)),
-        enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black, width: 0.0),
-            borderRadius: BorderRadius.circular(32.0)),
-        hintText: 'Email address',
-        hintStyle: TextStyle(color: Colors.black),
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-      ),
-    ),
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -82,10 +62,9 @@ class _EditProfileState extends State<EditProfile> {
         children: <Widget>[
           _name,
           _phoneNumber,
-          _email,
           SizedBox(height: MediaQuery.of(context).size.height*0.25,),
           FlatButton.icon(onPressed: (() async {
-            await patchDataDB(currentlyLoggedUser.id,nameController.text,emailAddressController.text,phoneNumberController.text);
+            await patchDataDB(currentlyLoggedUser.dbId,nameController.text,phoneNumberController.text);
           }), icon: Icon(Icons.send), label: Text("Update"))
 
 

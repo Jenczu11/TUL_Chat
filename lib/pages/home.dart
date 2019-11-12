@@ -1,23 +1,34 @@
-import 'dart:convert';
-
-import 'package:tul_mobileapp/pages/processing.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:tul_mobileapp/logic/authentication.dart';
+import 'package:tul_mobileapp/logic/rest_api.dart';
+import 'package:tul_mobileapp/pages/myTasks.dart';
 import 'package:tul_mobileapp/pages/profile.dart';
 import 'package:tul_mobileapp/pages/settings.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import '../objects/task.dart';
-import '../logic/rest_api.dart';
+import 'package:tul_mobileapp/constants.dart';
+import 'package:tul_mobileapp/pages/tasksAssigned.dart';
+
 import 'chat.dart';
 import 'createTask.dart';
 class Home extends StatefulWidget {
+  Home({Key key, this.auth, this.userId, this.userEmail, this.logoutCallback})
+      : super(key: key);
+
+  BaseAuth auth;
+  VoidCallback logoutCallback;
+  String userId;
+  String userEmail;
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-
-
-
+   @override 
+  void initState(){
+    print("----- home init State -----");
+    // fetchDataFromDB();
+    super.initState();
+  }
   // Properties & Variables needed
   //var currentColor = Color.fromRGBO(231, 129, 109, 1.0);
   int currentTab = 0; // to keep track of active tab index
@@ -27,23 +38,31 @@ class _HomeState extends State<Home> {
     Profile(),
     Settings(),
     NewTask(),
+    TaskAssigned(),
   ]; // to store nested tabs
   final PageStorageBucket bucket = PageStorageBucket();
   Widget currentScreen = Chat();
 
-
-
-
   @override
   Widget build(BuildContext context) {
+    // WidgetsBinding.instance.addPostFrameCallback((_) => onAfterBuild(context));
     return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            FlatButton.icon(onPressed: (() async {
+              await signOut();
+            }), icon: Icon(Icons.power_settings_new,color: Colors.red,), label: Text("Log Out"))
+          ],
+        ),
+      ),
       //backgroundColor: currentColor,
       body: PageStorage(
         child: currentScreen,
         bucket: bucket,
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.drafts),
+        child: Icon(Icons.add),
         
         onPressed: () {
           setState(() {
@@ -69,10 +88,11 @@ class _HomeState extends State<Home> {
                   MaterialButton(
                     minWidth: 40,
                     onPressed: () {
+                      // fetchDataFromDB();
                       setState(() {
                         currentScreen =
                             Chat(); // if user taps on this dashboard tab will be active
-                        currentTab = 1;
+                        currentTab = 0;
                       });
                     },
                     child: Column(
@@ -80,10 +100,35 @@ class _HomeState extends State<Home> {
                       children: <Widget>[
                         Icon(
                           Icons.chat,
-                          color: currentTab == 1 ? Colors.blue : Colors.grey,
+                          color: currentTab == 0 ? Colors.blue : Colors.grey,
                         ),
                         Text(
                           'Chats',
+                          style: TextStyle(
+                            color: currentTab == 0 ? Colors.blue : Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  MaterialButton(
+                    minWidth: 40,
+                    onPressed: () {
+                      setState(() {
+                        currentScreen =
+                            MyTasks(); // if user taps on this dashboard tab will be active
+                        currentTab = 1;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.list,
+                          color: currentTab == 1 ? Colors.blue : Colors.grey,
+                        ),
+                        Text(
+                          'My Tasks',
                           style: TextStyle(
                             color: currentTab == 1 ? Colors.blue : Colors.grey,
                           ),
@@ -93,6 +138,7 @@ class _HomeState extends State<Home> {
                   )
                 ],
               ),
+
 
               // Right Tab bar icons
 
@@ -129,7 +175,7 @@ class _HomeState extends State<Home> {
                     onPressed: () {
                       setState(() {
                         currentScreen =
-                            Settings(); // if user taps on this dashboard tab will be active
+                            TaskAssigned(); // if user taps on this dashboard tab will be active
                         currentTab = 3;
                       });
                     },
@@ -158,7 +204,20 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+  void onAfterBuild(BuildContext context){
+  currentScreen = Chat();
+  currentScreen = Profile();
+  currentScreen = Chat();
+}
 
+  signOut() async {
+    try {
+      await widget.auth.signOut();
+      widget.logoutCallback();
+    } catch (e) {
+      print(e);
+    }
+  }
 
 
 }

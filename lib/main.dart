@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:tul_mobileapp/pages/start_page.dart';
+import 'logic/authentication.dart';
+import 'pages/root_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,11 +11,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: Start() ,
-    );
-  }
+      home: new RootPage(auth: new Auth()));
+
+}
 }
 

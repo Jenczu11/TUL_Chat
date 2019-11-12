@@ -1,34 +1,120 @@
-import 'package:tul_mobileapp/constants.dart';
-import 'package:tul_mobileapp/logic/rest_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/semantics.dart';
+import 'package:tul_mobileapp/constants.dart';
+import 'package:tul_mobileapp/logic/rest_api.dart';
+import 'package:tul_mobileapp/objects/task.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Chat extends StatefulWidget {
   @override
   _ChatState createState() => _ChatState();
+
 }
 
 class _ChatState extends State<Chat> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
+    @override
+  void initState(){
+    print("--------Chat initState-------");
+    super.initState();
+    //  WidgetsBinding.instance
+        // .addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
+    // fetchDataFromDB();
+  }
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    final _width = MediaQuery.of(context).size.width;
+    final _height = MediaQuery.of(context).size.height;
+     print("TaskListLength: "+taskList.length.toString());
+    if(taskList == null || taskList.length<1)
+    {
+      return Scaffold(appBar: AppBar(
+            title: Text("Pending help requests"),
+            backgroundColor: Colors.deepPurple,
+          ),
+      body: FutureBuilder<List<Task>>(
+        future: fetchDataFromDB(),
+      builder: (context,snapshot){
+        if (snapshot.hasData)
+        {
+          print(snapshot.data.toString());
+          return new ListView.builder(
+            itemBuilder: (_, index) => TileItem(num: index),
+            itemCount: snapshot.data.length,
+          );
+        }
+        else if (snapshot.hasError){
+          return new Text("${snapshot.error}");
+        }
+        return ListView(children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 24.0),
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                    height: _height*0.05,
+                    width: _width,
+                    child: Text("Some minion kidnapped your data", textScaleFactor: 1.8, textAlign: TextAlign.center,),
+                  ),
+                             
+                     SizedBox(
+                    height: _height*0.6,
+                    child:  Image.asset("assets/minion.png"),
+                    ),
+                  Padding(
+                    padding: new EdgeInsets.only(
+                        top: _height / 30, left: _width / 8, right: _width / 8)),
 
+                    SizedBox(
+                    height: _height*0.1,
+                    child:  Text("Try pulling to refresh",textScaleFactor: 2,),
+                  ),
+                    
+                  ],
+                ),
+              ),
+            )
+          ]);
+      }
+      ,)
+      ,);
+    }
+    else
+  //   return (
+  //   child: RefreshIndicator(
+  //           key: _refreshIndicatorKey,
+  //           onRefresh: _refresh,
+  //           child: ListView.builder(
+  //           itemBuilder: (_, index) => TileItem(num: index),
+  //           itemCount: taskList.length,
+  //         )));
+  // }
+    return Scaffold(
           appBar: AppBar(
             title: Text("Pending help requests"),
             backgroundColor: Colors.deepPurple,
           ),
-          // body: TileItem(num: )
-          body: ListView(
-            children: new List.generate(
-              taskList.length,
-              (int index) {
-                return TileItem(num: index);
-              },
-            ),
-          )),
-    );
+          body: RefreshIndicator(
+            key: _refreshIndicatorKey,
+            onRefresh: _refresh,
+            child: ListView.builder(
+            itemBuilder: (_, index) => TileItem(num: index),
+            itemCount: taskList.length,
+            
+          ),
+          ));
+  }
+  
+  
+
+  Future<List<Task>> _refresh() {
+    setState(() {
+    
+    });
+    return fetchDataFromDB();
   }
 }
 
@@ -52,23 +138,24 @@ class TileItem extends StatelessWidget {
           children: <Widget>[
             Column(
               children: <Widget>[
-                 AspectRatio(
-                   aspectRatio: 485.0 / 384.0,
-                   child: Image.network("https://picsum.photos/485/384?image=$num"),
-                 ),
+                AspectRatio(
+                  aspectRatio: 485.0 / 384.0,
+                  child:
+                      Image.network("https://picsum.photos/485/384?image=$num"),
+                ),
                 Material(
                   child: ListTile(
                     leading: Icon(Icons.album),
                     title: Text(taskList[num].title),
-                  subtitle: Text(tagsToString(taskList[num])),
-                ),
+                    subtitle: Text("Tags : " + tagsToString(taskList[num])),
+                  ),
                 ),
                 ButtonTheme.bar(
                   // make buttons use the appropriate styles for cards
                   child: ButtonBar(
                     children: <Widget>[
                       FlatButton(
-                        child: const Text('Pomagam'),
+                        child: const Text('Click for more details'),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -128,18 +215,6 @@ class PageItem extends StatelessWidget {
       primary: true,
       leading: IconTheme(
           data: IconThemeData(color: Colors.white), child: CloseButton()),
-      // flexibleSpace: Container(
-      //   decoration: BoxDecoration(
-      //     gradient: LinearGradient(
-      //       begin: Alignment.topCenter,
-      //       end: Alignment.bottomCenter,
-      //       colors: [
-      //         Colors.black.withOpacity(0.4),
-      //         Colors.black.withOpacity(0.1),
-      //       ],
-      //     ),
-      //   ),
-      // ),
       backgroundColor: Colors.transparent,
     );
     final MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -166,8 +241,8 @@ class PageItem extends StatelessWidget {
               InkWell(
                 child: Material(
                   child: ListTile(
-                    title: Text(taskList[num].title),
-                    subtitle: Text(taskList[num].phoneNumber),
+                    title: Text("Title : "+taskList[num].title),
+                    subtitle: Text("Phone number : "+taskList[num].phoneNumber),
                   ),
                 ),
                 onTap: () => Navigator.of(context).pop(),
@@ -176,31 +251,77 @@ class PageItem extends StatelessWidget {
               Expanded(
                 child: Container(
                   child: Column(children: <Widget>[
-                    new Center(child: Text(taskList[num].description)),
-                    FlatButton.icon(
-                      label: Text("Call me"),
-                      icon: Icon(Icons.phone_in_talk,color: Colors.green,),
-                      onPressed: (() async {
-                        await launch("tel:${taskList[num].phoneNumber}");
-                      }),
+                    new Center(
+                        child:
+                            Text("Description :" + taskList[num].description)),
+                    Text("Date added :" + taskList[num].dateAdded.toString()),
+                    Image.network(
+                      "https://picsum.photos/485/384?image=$num",
+                      height: 300,
                     ),
-                    FlatButton.icon(
-                      label: Text("Mail me"),
-                      icon: Icon(Icons.mail,color: Colors.redAccent,),
-                      onPressed: (() async {
-                        await launch("mailto:${taskList[num].email}");
-                      }),
+                    Visibility(
+                      visible:taskList[num].isAssigned,
+                      child: Column(children: <Widget>[
+                        Text("User assigned :" + taskList[num].userAssigned),
+                        Text("Date assigned :" + taskList[num].dateAssigned)
+                      ],),
+                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Visibility(
+                          visible:
+                              phoneNumberVisibility(taskList[num].phoneNumber),
+                          child: FlatButton.icon(
+                            label: Text("Call me"),
+                            icon: Icon(
+                              Icons.phone_in_talk,
+                              color: Colors.green,
+                            ),
+                            onPressed: (() async {
+                              await launch("tel:${taskList[num].phoneNumber}");
+                            }),
+                          ),
+                        ),
+                        FlatButton.icon(
+                          label: Text("Mail me"),
+                          icon: Icon(
+                            Icons.mail,
+                            color: Colors.redAccent,
+                          ),
+                          onPressed: (() async {
+                            await launch("mailto:${taskList[num].email}");
+                          }),
+                        ),
+                      ],
                     ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Visibility(
+                            visible: acceptButtonVisibility(taskList[num]),
+                            child: FlatButton.icon(
+                              label: Text("Accept"),
+                              icon: Icon(
+                                Icons.check,
+                                color: Colors.greenAccent,
+                              ),
+                              onPressed: (() async {
+                                await assignUserToTask(
+                                    taskList[num].id, currentlyLoggedUser.email);
+                                Navigator.of(context).pop();
+                              }),
+                            ),
+                          ),
+                        ]),
                     new Expanded(
                         child: new Container(
                       child: new Align(
                         alignment: Alignment.bottomRight,
-                        child: new FlatButton(
-                          child: Text('Bottom'),
-                          onPressed: () => {
-                            //TODO: Na wcisnieciu usun odpowiednia karte z bazy
-                            print("Wcisnalem przycisk bottom")
-                          },
+                        child: new FlatButton.icon(
+                          icon: Icon(Icons.arrow_back),
+                          label: Text(''),
+                          onPressed: () => {Navigator.of(context).pop()},
                         ),
                       ),
                       padding: EdgeInsets.only(bottom: 24),
@@ -208,18 +329,6 @@ class PageItem extends StatelessWidget {
                   ]),
                 ),
               ),
-
-              //      ButtonTheme.bar( // make buttons use the appropriate styles for cards
-              //   child: ButtonBar(
-              //     children: <Widget>[
-              //       FlatButton(
-              //         child: const Text('Pomagam'),
-              //         onPressed: () { },
-              //       ),
-
-              //     ],
-              //   ),
-              // ),
             ],
           ),
         ),
@@ -237,4 +346,20 @@ class PageItem extends StatelessWidget {
       ),
     ]);
   }
+
+  bool phoneNumberVisibility(String phoneNumber) {
+    if (phoneNumber == "") {
+      return false;
+    } else
+      return true;
+  }
+
+  acceptButtonVisibility(Task task) {
+    if(task.isAssigned == false){
+      return true;
+    }
+    else return false;
+  }
+
+
 }
