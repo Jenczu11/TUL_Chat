@@ -36,7 +36,7 @@ class _HomeState extends State<Home> {
     MyTasks(),
   ]; // to store nested tabs
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget currentScreen = Chat();
+  Widget currentScreen = BountyBoard();
 
   @override
   Widget build(BuildContext context) {
