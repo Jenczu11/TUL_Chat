@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_demo/appbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'const.dart';
+
+QuerySnapshot cache;
 
 // import 'package:tul_mobileapp/logic/authentication.dart';
 // import 'package:url_launcher/url_launcher.dart';
@@ -25,14 +28,44 @@ class _MyTasksState extends State<MyTasks> {
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
-    return ListTile(
-        title: Row(
-      children: <Widget>[
-        Expanded(
-          child: Text(document['taskDescription']),
-        )
-      ],
-    ));
+    return Container(
+      child: FlatButton(
+        child: Row(
+          children: <Widget>[
+            Flexible(
+              child: Container(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      child: Text(
+                        'Task: ${document['taskTitle']}',
+                        // style: TextStyle(color: primaryColor),
+                      ),
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
+                    ),
+                    Container(
+                      child: Text(
+                        'Task Description: ${document['taskDescription'] ?? 'Not available'}',
+                        // style: TextStyle(color: primaryColor),
+                      ),
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                    )
+                  ],
+                ),
+                margin: EdgeInsets.only(left: 20.0),
+              ),
+            ),
+          ],
+        ),
+        color: greyColor2,
+        padding: EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 10.0),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      ),
+      margin: EdgeInsets.only(bottom: 10.0, left: 5.0, right: 5.0),
+    );
   }
 
   @override
@@ -45,17 +78,27 @@ class _MyTasksState extends State<MyTasks> {
           context: context,
         ),
         body: StreamBuilder(
+          initialData: cache,
           stream: Firestore.instance.collection('tasks').snapshots(),
           builder: (context, snapshot) {
             // print(snapshot.data);
-            if (!snapshot.hasData) return const Text('loading...');
+            if (!snapshot.hasData)
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(themeColor),
+                ),
+              );
+            cache = snapshot.data;
             return ListView.builder(
-                itemExtent: 80.0,
                 itemCount: snapshot.data.documents.length,
                 itemBuilder: (context, index) {
-                  if (snapshot.data.documents[index]['UserID'] == id)
+                  if (snapshot.data.documents[index]['UserID'] == id) {
+                    // print(index);
                     return _buildListItem(
                         context, snapshot.data.documents[index]);
+                  } else
+                    return SizedBox
+                        .shrink(); // <--- to dodałem bo takto listview builder wysypywał się bo przelatywał index a nic nie zwracał + build musi coś zwracać więc mamy sizedbox XD
                 });
           },
         ));

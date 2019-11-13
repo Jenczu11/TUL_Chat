@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_demo/appbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'const.dart';
 
 // import 'package:tul_mobileapp/logic/authentication.dart';
 // import 'package:url_launcher/url_launcher.dart';
@@ -21,18 +22,52 @@ class _BountyBoardState extends State<BountyBoard> {
   void initState() {
     super.initState();
     _getIdfromSharedPref();
+    // getData();
     // _getMarker();
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
-    return ListTile(
-        title: Row(
-      children: <Widget>[
-        Expanded(
-          child: Text(document['taskDescription']),
-        )
-      ],
-    ));
+    return Container(
+      child: FlatButton(
+        child: Row(
+          children: <Widget>[
+            Flexible(
+              child: InkWell(
+                child: Container(
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        child: Text(
+                          'Task: ${document['taskTitle']}',
+                          // style: TextStyle(color: primaryColor),
+                        ),
+                        alignment: Alignment.centerLeft,
+                        margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
+                      ),
+                      Container(
+                        child: Text(
+                          'Task Description: ${document['taskDescription'] ?? 'Not available'}',
+                          // style: TextStyle(color: primaryColor),
+                        ),
+                        alignment: Alignment.centerLeft,
+                        margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                      )
+                    ],
+                  ),
+                  margin: EdgeInsets.only(left: 20.0),
+                ),
+                onTap: () => {_showDialog()},
+              ),
+            )
+          ],
+        ),
+        color: greyColor2,
+        padding: EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 10.0),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      ),
+      margin: EdgeInsets.only(bottom: 10.0, left: 5.0, right: 5.0),
+    );
   }
 
   @override
@@ -45,20 +80,26 @@ class _BountyBoardState extends State<BountyBoard> {
           context: context,
         ),
         body: StreamBuilder(
-          stream: Firestore.instance.collection('tasks').snapshots(),
-          builder: (context, snapshot) {
-            // print(snapshot.data);
-            if (!snapshot.hasData) return const Text('loading...');
-            return ListView.builder(
-                itemExtent: 80.0,
-                itemCount: snapshot.data.documents.length,
-                itemBuilder: (context, index) {
-                  if (snapshot.data.documents[index]['UserID'] != id)
-                    return _buildListItem(
-                        context, snapshot.data.documents[index]);
-                });
-          },
-        ));
+            stream: Firestore.instance.collection('tasks').snapshots(),
+            builder: (context, snapshot) {
+              // print(snapshot.data.documents.length);
+              if (!snapshot.hasData)
+                return Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(themeColor),
+                  ),
+                );
+
+              return ListView.builder(
+                  itemCount: snapshot.data.documents.length,
+                  itemBuilder: (context, index) {
+                    if (snapshot.data.documents[index]['UserID'] != id) {
+                      return _buildListItem(
+                          context, snapshot.data.documents[index]);
+                    } else
+                      return SizedBox.shrink();
+                  });
+            }));
   }
 
   _getIdfromSharedPref() async {
@@ -66,6 +107,40 @@ class _BountyBoardState extends State<BountyBoard> {
     id = prefs.getString('id') ?? '';
   }
 
+  void getData() {
+    Firestore.instance
+        .collection("tasks")
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) => print('${f.data}}'));
+    });
+  }
+
+// user defined function
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Accept Task ?"),
+          content: new Text("Alert Dialog body"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                // TODO:
+                // Jak wcisinie usunac z listy i polaczyc uzytkownikow
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
   // _getMarker() async {
   // QuerySnapshot querySnapshot =
   // await Firestore.instance.collection("tasks").getDocuments();
