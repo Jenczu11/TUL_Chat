@@ -153,9 +153,14 @@ class MainScreenState extends State<MainScreen> {
   }
 
   Widget buildItem(BuildContext context, DocumentSnapshot document) {
+    print("userID: "+document['id']);
+    print("abletoChat: "+document['ableToChatWith'].toString());
     if (document['id'] == currentUserId) {
       return Container();
     } else {
+       
+      // if(document['id'] == currentUserId && document['ableToChatWith'].toString().includes)
+      
       return Container(
         child: FlatButton(
           child: Row(

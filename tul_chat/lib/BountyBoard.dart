@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_demo/appbar.dart';
@@ -56,7 +58,7 @@ class _BountyBoardState extends State<BountyBoard> {
                   ),
                   margin: EdgeInsets.only(left: 20.0),
                 ),
-                onTap: () => {_showDialog()},
+                onTap: () => {_showDialog(document['UserID'])},
               ),
             )
           ],
@@ -117,7 +119,7 @@ class _BountyBoardState extends State<BountyBoard> {
   }
 
 // user defined function
-  void _showDialog() {
+  void _showDialog(String taskID) {
     // flutter defined function
     showDialog(
       context: context,
@@ -134,6 +136,15 @@ class _BountyBoardState extends State<BountyBoard> {
                 Navigator.of(context).pop();
                 // TODO:
                 // Jak wcisinie usunac z listy i polaczyc uzytkownikow
+                // Firestore.instance.collection("users").document()
+                List<String> ids = <String>[];
+                ids.add(taskID); 
+                // To dodaje
+                Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayUnion(ids)});
+
+                // To polecenie usuwa odpowiedni userID z userow
+                //  Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayRemove(ids)});
+                // Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": ids});
               },
             ),
           ],
