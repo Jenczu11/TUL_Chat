@@ -135,7 +135,8 @@ class _BountyBoardState extends State<BountyBoard> {
               return ListView.builder(
                   itemCount: snapshot.data.documents.length,
                   itemBuilder: (context, index) {
-                    if (snapshot.data.documents[index]['UserID'] != id) {
+                    if (snapshot.data.documents[index]['UserID'] != id &&
+                    snapshot.data.documents[index]['AssignedUser'] == ""  ) {
                       return _buildListItem(
                           context, snapshot.data.documents[index]);
                     } else
