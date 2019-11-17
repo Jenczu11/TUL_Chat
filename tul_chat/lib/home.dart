@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_demo/BountyBoard.dart';
 import 'package:flutter_chat_demo/NewTask.dart';
@@ -19,6 +20,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   _HomeState({Key key, @required this.currentUserId});
   final String currentUserId;
+  
   @override
   void initState() {
     print("----- home init State -----");
@@ -31,7 +33,7 @@ class _HomeState extends State<Home> {
   int currentTab = 0; // to keep track of active tab index
   bool onNewTask = false;
   final List<Widget> screens = [
-    Chat(),
+    ChatRooms(),
     NewTask(),
     BountyBoard(),
     MyTasks(),

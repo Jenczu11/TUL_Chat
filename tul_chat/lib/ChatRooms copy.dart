@@ -15,11 +15,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import 'home.dart';
-
 class ChatRooms extends StatefulWidget {
   final String currentUserId;
-  List<dynamic> ableToChatWith = new List();
+
   ChatRooms({Key key, @required this.currentUserId}) : super(key: key);
 
   @override
@@ -34,31 +32,17 @@ class ChatRoomsState extends State<ChatRooms> {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       new FlutterLocalNotificationsPlugin();
   final GoogleSignIn googleSignIn = GoogleSignIn();
-  List<dynamic> ableToChatWith = new List();
+
   bool isLoading = false;
-  
+
   @override
   void initState() {
-    
     super.initState();
     registerNotification();
     configLocalNotification();
     // _getData();
   }
-  void _getData() async 
-  {
-    DocumentReference documentReference = await Firestore.instance.collection("users").document(currentUserId);
-            documentReference.get().then((datasnapshot) {
-              if (datasnapshot.exists) {
-                print(datasnapshot.data['ableToChatWith'].toString());
-                ableToChatWith = datasnapshot.data['ableToChatWith'];
-              }
-              else{
-                // print("No such user");
-              }
 
-  });
-  }
   void registerNotification() {
     firebaseMessaging.requestNotificationPermissions();
 
@@ -114,7 +98,7 @@ class ChatRoomsState extends State<ChatRooms> {
   // void _getData
   @override
   Widget build(BuildContext context) {
-    // print(Firestore.instance.collection("users").document(currentUserId).toString());
+    print(Firestore.instance.collection("users").document(currentUserId).toString());
     // QuerySnapshot querySnapshot =
   //  await Firestore.instance.collection("users").getDocuments();
   // var list = querySnapshot.documents;
@@ -130,7 +114,7 @@ class ChatRoomsState extends State<ChatRooms> {
           // List
           Container(
             child: StreamBuilder(
-              stream:  Firestore.instance.collection('users').snapshots(),
+              stream: Firestore.instance.collection('users').snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
@@ -139,18 +123,10 @@ class ChatRoomsState extends State<ChatRooms> {
                     ),
                   );
                 } else {
-                  
                   return ListView.builder(
                     padding: EdgeInsets.all(10.0),
-                    itemBuilder: (context, index) {
-                      if(snapshot.data.documents[index]['id'].toString()==currentUserId)
-                      {
-                        print("yes");
-                          ableToChatWith = snapshot.data.documents[index]['ableToChatWith'];
-                      }
-                        return buildItem(context, snapshot.data.documents[index]);
-                    },
-                    
+                    itemBuilder: (context, index) =>
+                        buildItem(context, snapshot.data.documents[index]),
                     itemCount: snapshot.data.documents.length,
                   );
                 }
@@ -179,27 +155,15 @@ class ChatRoomsState extends State<ChatRooms> {
   }
 
   Widget buildItem(BuildContext context, DocumentSnapshot document) {
-    // DocumentReference documentReference = Firestore.instance.collection("users").document(currentUserId);
-    //         documentReference.get().then((datasnapshot) {
-    //           if (datasnapshot.exists) {
-    //             print(datasnapshot.data['ableToChatWith'].toString());
-    //             ableToChatWith = datasnapshot.data['ableToChatWith'];
-    //           }
-    //         };
     // print("userID: "+document['id']);
+    // print("abletoChat: "+document['ableToChatWith'].toString());
     if (document['id'] == currentUserId) {
       return Container();
     } else {
-
-      // print(ableToChatWith.toString());
-      // //  print("abletoChat: "+document['ableToChatWith'].toString());
-      // // if(document['id'] == currentUserId && document['ableToChatWith'].toString().includes)
-      if(ableToChatWith.length>0){
-      for(var peerID in ableToChatWith)
-      {
-        print(document['id'].toString()+":"+peerID.toString());
-        if(peerID.toString() == document['id'].toString()){
-        return Container(
+       
+      // if(document['id'] == currentUserId && document['ableToChatWith'].toString().includes)
+      
+      return Container(
         child: FlatButton(
           child: Row(
             children: <Widget>[
@@ -273,11 +237,5 @@ class ChatRoomsState extends State<ChatRooms> {
         margin: EdgeInsets.only(bottom: 10.0, left: 5.0, right: 5.0),
       );
     }
-  }
-  }
-return Container();
-      } 
-//       // print("-----------------------------------");
-    
   }
 }
