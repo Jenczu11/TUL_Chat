@@ -159,7 +159,7 @@ class _MyTasksState extends State<MyTasks> {
                 Firestore.instance.collection("users").document(userID).updateData({"ableToChatWith": FieldValue.arrayRemove(ids1)});
                 Firestore.instance.collection("users").document(assignedUser).updateData({"ableToChatWith": FieldValue.arrayRemove(ids)});
                 // Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": ids});
-                // Firestore.instance.collection('tasks').document(taskID).updateData({"AssignedUser": ""});
+                Firestore.instance.collection('tasks').document(taskID).updateData({"AssignedUser": ""});
               },
             ),
           ],
