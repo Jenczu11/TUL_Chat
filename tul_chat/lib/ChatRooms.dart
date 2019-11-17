@@ -132,7 +132,10 @@ class ChatRoomsState extends State<ChatRooms> {
             child: StreamBuilder(
               stream:  Firestore.instance.collection('users').snapshots(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) {
+                return StreamBuilder(
+                  stream: Firestore.instance.collection('users').snapshots(),
+                builder: (context,snapshot){
+                  if (!snapshot.hasData) {
                   return Center(
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(themeColor),
@@ -154,7 +157,9 @@ class ChatRoomsState extends State<ChatRooms> {
                     itemCount: snapshot.data.documents.length,
                   );
                 }
-              },
+                },);
+                }
+                
             ),
           ),
 
