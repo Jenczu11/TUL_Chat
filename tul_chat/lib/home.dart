@@ -4,6 +4,7 @@ import 'package:flutter_chat_demo/NewTask.dart';
 import 'package:flutter_chat_demo/main.dart';
 import 'package:flutter_chat_demo/user_profile.dart';
 
+import 'ChatRooms.dart';
 import 'MyTasks.dart';
 import 'chat.dart';
 
@@ -157,7 +158,7 @@ class _HomeState extends State<Home> {
                     minWidth: 40,
                     onPressed: () {
                       setState(() {
-                        currentScreen = MainScreen(
+                        currentScreen = ChatRooms(
                             currentUserId:
                                 currentUserId); // if user taps on this dashboard tab will be active
                         currentTab = 3;
