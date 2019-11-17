@@ -114,10 +114,12 @@ class _MyTasksState extends State<MyTasks> {
   }
 
   void _showDialog(DocumentSnapshot document) {
+    String userID = document['UserID'];
     String taskID = document.documentID;
     String taskTitle = document['taskTitle'];
     String taskTimeStamp = document['timeStamp'];
     String taskDescription = document['taskDescription'];
+    String assignedUser = document['AssignedUser'];
     // flutter defined function
     showDialog(
       context: context,
@@ -140,17 +142,24 @@ class _MyTasksState extends State<MyTasks> {
               child: new Text("Dismiss Task"),
               onPressed: () {
                 Navigator.of(context).pop();
-                // TODO:
+                // TODO://
+
+                //6OJtaXe1LGgDWxojDsgctFQUZrI2
+
                 // Jak wcisinie usunac z listy i polaczyc uzytkownikow
                 // Firestore.instance.collection("users").document()
-                // List<String> ids = <String>[];
-                // ids.add(userID); 
-                // List<String> ids1 = <String>[];
-                // ids1.add(id); 
+                List<String> ids1 = <String>[];
+                ids1.add(assignedUser); 
+                print(assignedUser);
+                List<String> ids = <String>[];
+                ids.add(userID); 
+                print(userID);
+                
                 // To polecenie usuwa odpowiedni userID z userow
-                // Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayRemove(ids)});
-                // Firestore.instance.collection("users").document(userID).updateData({"ableToChatWith": FieldValue.arrayRemove(ids1)});
+                Firestore.instance.collection("users").document(userID).updateData({"ableToChatWith": FieldValue.arrayRemove(ids1)});
+                Firestore.instance.collection("users").document(assignedUser).updateData({"ableToChatWith": FieldValue.arrayRemove(ids)});
                 // Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": ids});
+                // Firestore.instance.collection('tasks').document(taskID).updateData({"AssignedUser": ""});
               },
             ),
           ],
