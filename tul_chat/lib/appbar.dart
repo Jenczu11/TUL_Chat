@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_demo/settings.dart';
+import 'package:flutter_chat_demo/user_profile.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_chat_demo/login.dart';
 
@@ -16,7 +16,6 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
   final AppBar appBar;
   final List<Widget> widgets;
   final List<Choice> choices = const <Choice>[
-    const Choice(title: 'Settings', icon: Icons.settings),
     const Choice(title: 'Log out', icon: Icons.exit_to_app),
     const Choice(title: 'Exit', icon: Icons.close),
   ];
@@ -69,10 +68,6 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
     if (choice.title == 'Exit') {
       onBackPress();
-    }
-    if (choice.title == 'Settings') {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Settings()));
     }
   }
 

@@ -11,7 +11,7 @@ import 'package:flutter_chat_demo/appbar.dart';
 import 'package:flutter_chat_demo/chat.dart';
 import 'package:flutter_chat_demo/const.dart';
 import 'package:flutter_chat_demo/login.dart';
-import 'package:flutter_chat_demo/settings.dart';
+import 'package:flutter_chat_demo/user_profile.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';

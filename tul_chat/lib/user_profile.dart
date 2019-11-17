@@ -10,16 +10,17 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'appbar.dart';
+
 class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(
-        title: new Text(
-          'SETTINGS',
-          style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+      appBar:BaseAppBar(
+        title: "User profile",
+        appBar: AppBar(),
+        widgets: <Widget>[Icon(Icons.more_vert)],
+        context: context,
       ),
       body: new SettingsScreen(),
     );

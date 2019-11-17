@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_demo/BountyBoard.dart';
 import 'package:flutter_chat_demo/NewTask.dart';
 import 'package:flutter_chat_demo/main.dart';
-import 'package:flutter_chat_demo/randomPage.dart';
+import 'package:flutter_chat_demo/user_profile.dart';
 
 import 'MyTasks.dart';
 import 'chat.dart';
@@ -41,7 +41,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     // WidgetsBinding.instance.addPostFrameCallback((_) => onAfterBuild(context));
-    return Scaffold(
+    return
+      WillPopScope(onWillPop: () async => false,child:Scaffold(
       //backgroundColor: currentColor,
       body: PageStorage(
         child: currentScreen,
@@ -132,7 +133,7 @@ class _HomeState extends State<Home> {
                     minWidth: 40,
                     onPressed: () {
                       setState(() {
-                        currentScreen; // if user taps on this dashboard tab will be active
+                        currentScreen = Settings(); // if user taps on this dashboard tab will be active
                         currentTab = 2;
                       });
                     },
@@ -184,6 +185,6 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
-    );
+      ));
   }
 }

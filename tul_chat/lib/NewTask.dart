@@ -12,8 +12,11 @@ class NewTask extends StatefulWidget {
 
 class _NewTaskState extends State<NewTask> {
   Widget newTask;
-  String titleValue = "";
-  String description = "";
+  final TextEditingController titleValue = new TextEditingController();
+  final TextEditingController description = new TextEditingController();
+  final TextEditingController fieldOfStudy = new TextEditingController();
+  String yearOfStudy = null ;
+  String deparment = null;
   SharedPreferences prefs;
   String id;
   @override
@@ -27,15 +30,16 @@ class _NewTaskState extends State<NewTask> {
         label: Text('Add'),
         onPressed: () async {
           print("Dodaje zadanie");
-          print(titleValue);
-          print(description);
           prefs = await SharedPreferences.getInstance();
           id = prefs.getString('id') ?? '';
           print(id);
           Firestore.instance.collection('tasks').add({
             'UserID': id,
-            'taskTitle': titleValue,
-            'taskDescription': description,
+            'taskTitle': titleValue.text,
+            'taskDescription': description.text,
+            'department': deparment,
+            'fieldOfStudy': fieldOfStudy.text,
+            'yearOfStudy': yearOfStudy,
             'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
           });
 
@@ -57,7 +61,15 @@ class _NewTaskState extends State<NewTask> {
           //   );
           // }
           // );
-        },
+          titleValue.clear();
+          description.clear();
+          fieldOfStudy.clear();
+          deparment = null;
+          yearOfStudy = null;
+          setState(() {
+
+          });
+          },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       appBar: AppBar(
@@ -68,19 +80,50 @@ class _NewTaskState extends State<NewTask> {
         child: ListView(
           children: <Widget>[
             TextField(
+              controller: titleValue,
               decoration: InputDecoration(labelText: 'Title'),
-              onChanged: (String value) {
+            ),
+            TextField(
+              controller: description,
+              decoration: InputDecoration(labelText: 'Description'),
+              maxLines: 3,
+            ),
+            SizedBox(height: 5.0,),
+            new DropdownButton<String>(
+              icon: Icon(Icons.account_balance),
+              hint: Text("Deparment  "),
+              value: deparment,
+              items: <String>['FTIMS', 'EIIA', 'WIPOS', 'BINOZ','ZIIP',"Mechaniczny","Chemiczny","WTMIWT","BAIS",].map((String value) {
+                return new DropdownMenuItem<String>(
+                  value: value,
+                  child: new Text(value),
+                );
+              }).toList(),
+              onChanged: (value) {
+                this.deparment = value;
                 setState(() {
-                  titleValue = value;
                 });
               },
             ),
+            SizedBox(height: 5.0,),
             TextField(
-              decoration: InputDecoration(labelText: 'Description'),
-              maxLines: 3,
-              onChanged: (String value) {
+              controller: fieldOfStudy,
+              decoration: InputDecoration(labelText: 'Field of study'),
+              maxLines: 1,
+            ),
+            new DropdownButton<String>(
+              icon: Icon(Icons.timeline),
+              hint: Text("Year of study  "),
+              value: yearOfStudy,
+              items: <String>["1 ", '2', '3', '4','5',].map((String value) {
+                return new DropdownMenuItem<String>(
+                  value: value,
+                  child: new Text(value),
+                );
+              }).toList(),
+              onChanged: (value) {
+                this.yearOfStudy = value;
                 setState(() {
-                  description = value;
                 });
               },
             ),
