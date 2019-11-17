@@ -65,7 +65,7 @@ class _MyTasksState extends State<MyTasks> {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)), 
             onPressed: () {
               //TODO : destroy task
-              _showDialog(id);
+              _showDialog(document);
             },
       ),
       margin: EdgeInsets.only(bottom: 10.0, left: 5.0, right: 5.0),
@@ -113,7 +113,11 @@ class _MyTasksState extends State<MyTasks> {
     id = prefs.getString('id') ?? '';
   }
 
-  void _showDialog(String userID) {
+  void _showDialog(DocumentSnapshot document) {
+    String taskID = document.documentID;
+    String taskTitle = document['taskTitle'];
+    String taskTimeStamp = document['timeStamp'];
+    String taskDescription = document['taskDescription'];
     // flutter defined function
     showDialog(
       context: context,
@@ -121,26 +125,31 @@ class _MyTasksState extends State<MyTasks> {
         // return object of type Dialog
         return AlertDialog(
           title: new Text("Delete Task ?"),
-          content: new Text("Alert Dialog body"),
+          content: new Text("TaskID ${taskID}\nTaskTitle ${taskTitle}\nTaskDescription ${taskDescription}\n"),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
-              child: new Text("Close"),
+              child: new Text("Remove Task"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Firestore.instance.collection('tasks').document(taskID).delete();
+
+              },
+            ),
+            new FlatButton(
+              child: new Text("Dismiss Task"),
               onPressed: () {
                 Navigator.of(context).pop();
                 // TODO:
                 // Jak wcisinie usunac z listy i polaczyc uzytkownikow
                 // Firestore.instance.collection("users").document()
-                List<String> ids = <String>[];
-                ids.add(userID); 
-                // To dodaje
-                // Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayUnion(ids)});
+                // List<String> ids = <String>[];
+                // ids.add(userID); 
                 // List<String> ids1 = <String>[];
                 // ids1.add(id); 
-                // Firestore.instance.collection("users").document(userID).updateData({"ableToChatWith": FieldValue.arrayUnion(ids1)});
-
                 // To polecenie usuwa odpowiedni userID z userow
-                 Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayRemove(ids)});
+                // Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayRemove(ids)});
+                // Firestore.instance.collection("users").document(userID).updateData({"ableToChatWith": FieldValue.arrayRemove(ids1)});
                 // Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": ids});
               },
             ),

@@ -58,7 +58,7 @@ class _BountyBoardState extends State<BountyBoard> {
                   ),
                   margin: EdgeInsets.only(left: 20.0),
                 ),
-                onTap: () => {_showDialog(document['UserID'])},
+                onTap: () => {_showDialog(document)},
               ),
             )
           ],
@@ -119,7 +119,8 @@ class _BountyBoardState extends State<BountyBoard> {
   }
 
 // user defined function
-  void _showDialog(String userID) {
+  void _showDialog(DocumentSnapshot document) {
+    String userID = document['UserID'];
     // flutter defined function
     showDialog(
       context: context,
@@ -144,6 +145,7 @@ class _BountyBoardState extends State<BountyBoard> {
                 // To dodaje
                 Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayUnion(ids)});
                 Firestore.instance.collection("users").document(userID).updateData({"ableToChatWith": FieldValue.arrayUnion(ids1)});
+                Firestore.instance.collection("tasks").document(document.documentID).updateData({"AssignedUser": id});
 
                 // To polecenie usuwa odpowiedni userID z userow
                 // Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayRemove(ids)});
