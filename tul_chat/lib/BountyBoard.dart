@@ -131,7 +131,7 @@ class _BountyBoardState extends State<BountyBoard> {
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
-              child: new Text("Close"),
+              child: new Text("Accept Task"),
               onPressed: () {
                 Navigator.of(context).pop();
                 // TODO:
@@ -139,14 +139,32 @@ class _BountyBoardState extends State<BountyBoard> {
                 // Firestore.instance.collection("users").document()
                 List<String> ids = <String>[];
                 ids.add(userID); 
-                // To dodaje
-                Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayUnion(ids)});
                 List<String> ids1 = <String>[];
                 ids1.add(id); 
+                // To dodaje
+                Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayUnion(ids)});
                 Firestore.instance.collection("users").document(userID).updateData({"ableToChatWith": FieldValue.arrayUnion(ids1)});
 
                 // To polecenie usuwa odpowiedni userID z userow
-                //  Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayRemove(ids)});
+                // Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayRemove(ids)});
+                // Firestore.instance.collection("users").document(userID).updateData({"ableToChatWith": FieldValue.arrayRemove(ids1)});
+                // Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": ids});
+              },
+            ),
+            new FlatButton(
+              child: new Text("Dismiss Task"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                // TODO:
+                // Jak wcisinie usunac z listy i polaczyc uzytkownikow
+                // Firestore.instance.collection("users").document()
+                List<String> ids = <String>[];
+                ids.add(userID); 
+                List<String> ids1 = <String>[];
+                ids1.add(id); 
+                // To polecenie usuwa odpowiedni userID z userow
+                Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayRemove(ids)});
+                Firestore.instance.collection("users").document(userID).updateData({"ableToChatWith": FieldValue.arrayRemove(ids1)});
                 // Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": ids});
               },
             ),

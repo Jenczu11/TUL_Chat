@@ -62,12 +62,16 @@ class _MyTasksState extends State<MyTasks> {
         color: greyColor2,
         padding: EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 10.0),
         shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)), 
+            onPressed: () {
+              //TODO : destroy task
+              _showDialog(id);
+            },
       ),
       margin: EdgeInsets.only(bottom: 10.0, left: 5.0, right: 5.0),
     );
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,6 +113,42 @@ class _MyTasksState extends State<MyTasks> {
     id = prefs.getString('id') ?? '';
   }
 
+  void _showDialog(String userID) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Delete Task ?"),
+          content: new Text("Alert Dialog body"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                // TODO:
+                // Jak wcisinie usunac z listy i polaczyc uzytkownikow
+                // Firestore.instance.collection("users").document()
+                List<String> ids = <String>[];
+                ids.add(userID); 
+                // To dodaje
+                // Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayUnion(ids)});
+                // List<String> ids1 = <String>[];
+                // ids1.add(id); 
+                // Firestore.instance.collection("users").document(userID).updateData({"ableToChatWith": FieldValue.arrayUnion(ids1)});
+
+                // To polecenie usuwa odpowiedni userID z userow
+                 Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayRemove(ids)});
+                // Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": ids});
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
   // _getMarker() async {
   // QuerySnapshot querySnapshot =
   // await Firestore.instance.collection("tasks").getDocuments();
