@@ -38,22 +38,62 @@ class _BountyBoardState extends State<BountyBoard> {
                 child: Container(
                   child: Column(
                     children: <Widget>[
-                      Container(
-                        child: Text(
-                          'Task: ${document['taskTitle']}',
-                          // style: TextStyle(color: primaryColor),
+                      Row(children: <Widget>[
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                          child: Text(
+                            'Task : ${document['taskTitle'] ?? 'Not available'}',
+                            // style: TextStyle(color: primaryColor),
+                          ),
                         ),
-                        alignment: Alignment.centerLeft,
-                        margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
-                      ),
-                      Container(
-                        child: Text(
-                          'Task Description: ${document['taskDescription'] ?? 'Not available'}',
-                          // style: TextStyle(color: primaryColor),
+                        Icon(Icons.textsms)
+                      ],),
+                      Row(children: <Widget>[
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                          child: Text(
+                            'Description : ${document['taskDescription'] ?? 'Not available'}',
+                            // style: TextStyle(color: primaryColor),
+                          ),
                         ),
-                        alignment: Alignment.centerLeft,
-                        margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                      )
+                        Icon(Icons.description)
+                      ],),
+                      Row(children: <Widget>[
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                          child: Text(
+                            'Department : ${document['department'] ?? 'Not available'}',
+                            // style: TextStyle(color: primaryColor),
+                          ),
+                        ),
+                        Icon(Icons.account_balance)
+                      ],),
+                      Row(children: <Widget>[
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                          child: Text(
+                            'Field of study : ${document['fieldOfStudy'] ?? 'Not available'}',
+                            // style: TextStyle(color: primaryColor),
+                          ),
+                        ),
+                        Icon(Icons.school)
+                      ],),
+                      Row(children: <Widget>[
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                          child: Text(
+                            'Year of study : ${document['yearOfStudy'] ?? 'Not available'}',
+                            // style: TextStyle(color: primaryColor),
+                          ),
+                        ),
+                        Icon(Icons.timeline)
+                      ],),
+
                     ],
                   ),
                   margin: EdgeInsets.only(left: 20.0),
@@ -127,12 +167,13 @@ class _BountyBoardState extends State<BountyBoard> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text("Accept Task ?"),
-          content: new Text("Alert Dialog body"),
+          title: new Text("Are you sure ?"),
+          content: new Text("Do you wish to accept this task?"),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("Accept Task"),
+            new FlatButton.icon(
+              label: new Text("Accept Task",style: TextStyle(color: Colors.black),),
+              icon: Icon(Icons.check, color: Colors.greenAccent,),
               onPressed: () {
                 Navigator.of(context).pop();
                 // TODO:
@@ -153,8 +194,9 @@ class _BountyBoardState extends State<BountyBoard> {
                 // Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": ids});
               },
             ),
-            new FlatButton(
-              child: new Text("Dismiss Task"),
+            new FlatButton.icon(
+              icon: Icon(Icons.clear,color: Colors.redAccent,),
+              label: new Text("Cancel",style: TextStyle(color: Colors.black),),
               onPressed: () {
                 Navigator.of(context).pop();
                 // TODO:
