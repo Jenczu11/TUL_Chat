@@ -40,6 +40,7 @@ class ChatRoomsState extends State<ChatRooms> {
     super.initState();
     registerNotification();
     configLocalNotification();
+    // _getData();
   }
 
   void registerNotification() {
@@ -94,9 +95,13 @@ class ChatRoomsState extends State<ChatRooms> {
         message['body'].toString(), platformChannelSpecifics,
         payload: json.encode(message));
   }
-
+  // void _getData
   @override
   Widget build(BuildContext context) {
+    print(Firestore.instance.collection("users").document(currentUserId).toString());
+    // QuerySnapshot querySnapshot =
+  //  await Firestore.instance.collection("users").getDocuments();
+  // var list = querySnapshot.documents;
     return Scaffold(
       appBar: BaseAppBar(
         title: "Help Chat",
@@ -150,8 +155,8 @@ class ChatRoomsState extends State<ChatRooms> {
   }
 
   Widget buildItem(BuildContext context, DocumentSnapshot document) {
-    print("userID: "+document['id']);
-    print("abletoChat: "+document['ableToChatWith'].toString());
+    // print("userID: "+document['id']);
+    // print("abletoChat: "+document['ableToChatWith'].toString());
     if (document['id'] == currentUserId) {
       return Container();
     } else {

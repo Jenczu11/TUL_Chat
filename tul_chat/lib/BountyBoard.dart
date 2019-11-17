@@ -119,7 +119,7 @@ class _BountyBoardState extends State<BountyBoard> {
   }
 
 // user defined function
-  void _showDialog(String taskID) {
+  void _showDialog(String userID) {
     // flutter defined function
     showDialog(
       context: context,
@@ -138,9 +138,12 @@ class _BountyBoardState extends State<BountyBoard> {
                 // Jak wcisinie usunac z listy i polaczyc uzytkownikow
                 // Firestore.instance.collection("users").document()
                 List<String> ids = <String>[];
-                ids.add(taskID); 
+                ids.add(userID); 
                 // To dodaje
                 Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayUnion(ids)});
+                List<String> ids1 = <String>[];
+                ids1.add(id); 
+                Firestore.instance.collection("users").document(userID).updateData({"ableToChatWith": FieldValue.arrayUnion(ids1)});
 
                 // To polecenie usuwa odpowiedni userID z userow
                 //  Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayRemove(ids)});
