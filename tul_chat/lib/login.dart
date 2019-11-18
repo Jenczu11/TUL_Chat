@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: themeColor,
       ),
-      home: LoginScreen(title: 'CHAT DEMO'),
+      home: LoginScreen(title: "Student's help chat"),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -141,7 +141,7 @@ class LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(backgroundColor: greyColor,
         appBar: AppBar(
           title: Text(
             widget.title,
@@ -151,8 +151,15 @@ class LoginScreenState extends State<LoginScreen> {
         ),
         body: Stack(
           children: <Widget>[
-            Center(
-              child: FlatButton(
+            Row(mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.network("http://robotyka.p.lodz.pl/sites/default/files/logo-pl.png",width: MediaQuery.of(context).size.width*0.9,),
+              ],
+            ),
+            Column(mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              SizedBox(height: 200,),
+              FlatButton(
                   onPressed: handleSignIn,
                   child: Text(
                     'SIGN IN WITH GOOGLE',
@@ -163,7 +170,7 @@ class LoginScreenState extends State<LoginScreen> {
                   splashColor: Colors.transparent,
                   textColor: Colors.white,
                   padding: EdgeInsets.fromLTRB(30.0, 15.0, 30.0, 15.0)),
-            ),
+            ],),
 
             // Loading
             Positioned(

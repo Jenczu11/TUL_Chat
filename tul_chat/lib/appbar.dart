@@ -6,6 +6,7 @@ import 'package:flutter_chat_demo/user_profile.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_chat_demo/login.dart';
 
+import 'about_us.dart';
 import 'const.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -18,6 +19,7 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Choice> choices = const <Choice>[
     const Choice(title: 'Log out', icon: Icons.exit_to_app),
     const Choice(title: 'Exit', icon: Icons.close),
+    const Choice(title: 'About us', icon: Icons.person),
   ];
 
   const BaseAppBar(
@@ -69,6 +71,9 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
     if (choice.title == 'Exit') {
       onBackPress();
     }
+    if (choice.title == 'About us') {
+      onAboutUsPressed();
+    }
   }
 
   Future<Null> handleSignOut() async {
@@ -84,6 +89,13 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
   Future<bool> onBackPress() {
     openDialog();
     return Future.value(false);
+  }
+
+  Future<Null> onAboutUsPressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AboutUs()),
+    );
   }
 
   Future<Null> openDialog() async {

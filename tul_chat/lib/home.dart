@@ -8,6 +8,7 @@ import 'package:flutter_chat_demo/user_profile.dart';
 import 'ChatRooms.dart';
 import 'MyTasks.dart';
 import 'chat.dart';
+import 'const.dart';
 
 class Home extends StatefulWidget {
   final String currentUserId;
@@ -88,12 +89,12 @@ class _HomeState extends State<Home> {
                       children: <Widget>[
                         Icon(
                           Icons.chat,
-                          color: currentTab == 0 ? Colors.blue : Colors.grey,
+                          color: currentTab == 0 ? themeColor : Colors.grey,
                         ),
                         Text(
                           ' B Board ',
                           style: TextStyle(
-                            color: currentTab == 0 ? Colors.blue : Colors.grey,
+                            color: currentTab == 0 ? themeColor : Colors.grey,
                           ),
                         ),
                       ],
@@ -113,12 +114,12 @@ class _HomeState extends State<Home> {
                       children: <Widget>[
                         Icon(
                           Icons.list,
-                          color: currentTab == 1 ? Colors.blue : Colors.grey,
+                          color: currentTab == 1 ? themeColor : Colors.grey,
                         ),
                         Text(
                           'My Tasks',
                           style: TextStyle(
-                            color: currentTab == 1 ? Colors.blue : Colors.grey,
+                            color: currentTab == 1 ? themeColor : Colors.grey,
                           ),
                         ),
                       ],
@@ -145,12 +146,12 @@ class _HomeState extends State<Home> {
                       children: <Widget>[
                         Icon(
                           Icons.dashboard,
-                          color: currentTab == 2 ? Colors.blue : Colors.grey,
+                          color: currentTab == 2 ? themeColor : Colors.grey,
                         ),
                         Text(
                           'Profile',
                           style: TextStyle(
-                            color: currentTab == 2 ? Colors.blue : Colors.grey,
+                            color: currentTab == 2 ? themeColor : Colors.grey,
                           ),
                         ),
                       ],
@@ -171,12 +172,12 @@ class _HomeState extends State<Home> {
                       children: <Widget>[
                         Icon(
                           Icons.people,
-                          color: currentTab == 3 ? Colors.blue : Colors.grey,
+                          color: currentTab == 3 ? themeColor : Colors.grey,
                         ),
                         Text(
                           'Help Chat',
                           style: TextStyle(
-                            color: currentTab == 3 ? Colors.blue : Colors.grey,
+                            color: currentTab == 3 ? themeColor : Colors.grey,
                           ),
                         ),
                       ],

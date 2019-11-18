@@ -5,6 +5,8 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'appbar.dart';
+
 class NewTask extends StatefulWidget {
   @override
   _NewTaskState createState() => _NewTaskState();
@@ -72,8 +74,11 @@ class _NewTaskState extends State<NewTask> {
           },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      appBar: AppBar(
-        title: Text('Create help request'),
+      appBar: BaseAppBar(
+        title: "Create new help request",
+        appBar: AppBar(),
+        widgets: <Widget>[Icon(Icons.more_vert)],
+        context: context,
       ),
       body: Container(
         margin: EdgeInsets.all(20.0),

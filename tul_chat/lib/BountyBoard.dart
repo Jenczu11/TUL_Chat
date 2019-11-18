@@ -116,7 +116,7 @@ class _BountyBoardState extends State<BountyBoard> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: BaseAppBar(
-          title: "Bounty Board",
+          title: "Help Requests",
           appBar: AppBar(),
           widgets: <Widget>[Icon(Icons.more_vert)],
           context: context,

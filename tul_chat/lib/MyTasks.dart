@@ -133,7 +133,7 @@ class _MyTasksState extends State<MyTasks> {
             child: Column(
               children: <Widget>[
                 Text(
-                    "What do would you like to do?"),
+                    "What would you like to do?"),
                 Text("Added "+ readTimestamp(int.parse(taskTimeStamp))),
                 SizedBox(
                   height: 20,
