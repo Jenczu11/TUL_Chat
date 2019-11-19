@@ -54,7 +54,7 @@ class ChatRoomsState extends State<ChatRooms> {
                 ableToChatWith = datasnapshot.data['ableToChatWith'];
               }
               else{
-                // print("No such user");
+                 print("No such user");
               }
 
   });

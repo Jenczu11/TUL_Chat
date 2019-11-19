@@ -92,7 +92,7 @@ class _HomeState extends State<Home> {
                           color: currentTab == 0 ? themeColor : Colors.grey,
                         ),
                         Text(
-                          ' B Board ',
+                          ' Tasks List ',
                           style: TextStyle(
                             color: currentTab == 0 ? themeColor : Colors.grey,
                           ),

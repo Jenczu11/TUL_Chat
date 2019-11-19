@@ -19,6 +19,7 @@ class _NewTaskState extends State<NewTask> {
   final TextEditingController fieldOfStudy = new TextEditingController();
   String yearOfStudy = null ;
   String deparment = null;
+  String AssignedUser = null;
   SharedPreferences prefs;
   String id;
   @override
@@ -43,6 +44,7 @@ class _NewTaskState extends State<NewTask> {
             'fieldOfStudy': fieldOfStudy.text,
             'yearOfStudy': yearOfStudy,
             'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
+            'AssignedUser': AssignedUser
           });
 
           // var documentReference = Firestore.instance
@@ -66,6 +68,7 @@ class _NewTaskState extends State<NewTask> {
           titleValue.clear();
           description.clear();
           fieldOfStudy.clear();
+
           deparment = null;
           yearOfStudy = null;
           setState(() {
