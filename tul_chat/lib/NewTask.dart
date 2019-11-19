@@ -44,7 +44,7 @@ class _NewTaskState extends State<NewTask> {
             'fieldOfStudy': fieldOfStudy.text,
             'yearOfStudy': yearOfStudy,
             'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
-            'AssignedUser': AssignedUser
+            'AssignedUser': ""
           });
 
           // var documentReference = Firestore.instance
