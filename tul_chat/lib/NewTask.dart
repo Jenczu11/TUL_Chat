@@ -28,53 +28,87 @@ class _NewTaskState extends State<NewTask> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        icon: Icon(Icons.add),
-        label: Text('Add'),
-        onPressed: () async {
-          print("Dodaje zadanie");
-          prefs = await SharedPreferences.getInstance();
-          id = prefs.getString('id') ?? '';
-          print(id);
-          Firestore.instance.collection('tasks').add({
-            'UserID': id,
-            'taskTitle': titleValue.text,
-            'taskDescription': description.text,
-            'department': deparment,
-            'fieldOfStudy': fieldOfStudy.text,
-            'yearOfStudy': yearOfStudy,
-            'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
-            'AssignedUser': ""
-          });
+      floatingActionButton: Builder(
+        builder: (context) {
+          return FloatingActionButton.extended(
+            icon: Icon(Icons.add),
+            label: Text('Add'),
+            onPressed: () async {
+              print("Dodaje zadanie");
+              prefs = await SharedPreferences.getInstance();
+              id = prefs.getString('id') ?? '';
+              print(id);
+              if((!(titleValue.text.length>=5) && (titleValue.text.isNotEmpty)) ||(titleValue.text.isEmpty) || (titleValue.text.contains("  "))){
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text("Couldn't add new task\nTitle value has to consists of at least 5 characters"),
+                  duration: Duration(seconds: 3),
+                ));
+              }
+              else if((!(description.text.length>=10) && (description.text.isNotEmpty)) ||(description.text.isEmpty) || (description.text.contains("  "))){
+                Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text("Couldn't add new task\nDescription has to consists of at least 10 characters"),
+                    duration: Duration(seconds: 3),
+                ));
+              }else if((!(fieldOfStudy.text.length>=5) && (fieldOfStudy.text.isNotEmpty)) ||(fieldOfStudy.text.isEmpty) || (fieldOfStudy.text.contains("  "))){
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text("Couldn't add new task\n Field of study has to consists of at least 5 characters"),
+                  duration: Duration(seconds: 3),
+                ));
+              }else if(deparment == null){
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text("Couldn't add new task\n Please select department"),
+                  duration: Duration(seconds: 3),
+                ));
+              }else if(yearOfStudy == null){
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text("Couldn't add new task\n Please select year of study"),
+                  duration: Duration(seconds: 3),
+                ));
+              }
+              else{
+                Firestore.instance.collection('tasks').add({
+                  'UserID': id,
+                  'taskTitle': titleValue.text,
+                  'taskDescription': description.text,
+                  'department': deparment,
+                  'fieldOfStudy': fieldOfStudy.text,
+                  'yearOfStudy': yearOfStudy,
+                  'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
+                  'AssignedUser': ""
+                });
+                titleValue.clear();
+                description.clear();
+                fieldOfStudy.clear();
 
-          // var documentReference = Firestore.instance
-          //     .collection('tasks')
-          //     .document(id)
-          //     .collection(id)
-          //     .document(DateTime.now().millisecondsSinceEpoch.toString());
+                deparment = null;
+                yearOfStudy = null;
 
-          // Firestore.instance.runTransaction((transaction) async {
-          //   await transaction.set(
-          //     documentReference,
-          //     {
-          //       'UserID': id,
-          //       'taskTitle': titleValue,
-          //       'taskDescription': description,
-          //       'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
-          //     },
-          //   );
-          // }
-          // );
-          titleValue.clear();
-          description.clear();
-          fieldOfStudy.clear();
+              }
+              // var documentReference = Firestore.instance
+              //     .collection('tasks')
+              //     .document(id)
+              //     .collection(id)
+              //     .document(DateTime.now().millisecondsSinceEpoch.toString());
 
-          deparment = null;
-          yearOfStudy = null;
-          setState(() {
+              // Firestore.instance.runTransaction((transaction) async {
+              //   await transaction.set(
+              //     documentReference,
+              //     {
+              //       'UserID': id,
+              //       'taskTitle': titleValue,
+              //       'taskDescription': description,
+              //       'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
+              //     },
+              //   );
+              // }
+              // );
 
-          });
-          },
+              setState(() {
+
+              });
+              },
+          );
+        }
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       appBar: BaseAppBar(
@@ -87,9 +121,12 @@ class _NewTaskState extends State<NewTask> {
         margin: EdgeInsets.all(20.0),
         child: ListView(
           children: <Widget>[
-            TextField(
+            TextFormField(
               controller: titleValue,
-              decoration: InputDecoration(labelText: 'Title'),
+              obscureText: false,
+              decoration: InputDecoration(
+                hintText: "Title",
+              ),
             ),
             TextField(
               controller: description,
@@ -143,4 +180,5 @@ class _NewTaskState extends State<NewTask> {
       ),
     );
   }
+
 }

@@ -138,23 +138,35 @@ class SettingsScreenState extends State<SettingsScreen> {
         .collection('users')
         .document(id)
         .updateData({'nickname': nickname, 'aboutMe': aboutMe, 'photoUrl': photoUrl}).then((data) async {
-      await prefs.setString('nickname', nickname);
-      await prefs.setString('aboutMe', aboutMe);
-      await prefs.setString('photoUrl', photoUrl);
+          if((!(nickname.length>=5) && (nickname.isNotEmpty)) ||(nickname.isEmpty) || (nickname.contains("  "))){
+            Scaffold.of(context).showSnackBar(SnackBar(
+              content: Text("Couldn't modify user profile\nNickname has to consists of at least 5 characters"),
+              duration: Duration(seconds: 3),
+            ));
+            setState(() {
+              isLoading = false;
+            });
+          }
+          else if((!(aboutMe.length>=5) && (aboutMe.isNotEmpty)) ||(aboutMe.isEmpty) || (aboutMe.contains("  "))){
+            Scaffold.of(context).showSnackBar(SnackBar(
+              content: Text("Couldn't modify user profile\n 'About me' has to consists of at least 5 characters"),
+              duration: Duration(seconds: 3),
+            ));
+            setState(() {
+              isLoading = false;
+            });
+          }
+          else{
+            await prefs.setString('nickname', nickname);
+            await prefs.setString('aboutMe', aboutMe);
+            await prefs.setString('photoUrl', photoUrl);
+            setState(() {
+              isLoading = false;
+            });
 
-      setState(() {
-        isLoading = false;
-      });
-
-      Fluttertoast.showToast(msg: "Update success");
-    }).catchError((err) {
-      setState(() {
-        isLoading = false;
-      });
-
-      Fluttertoast.showToast(msg: err.toString());
-    });
-  }
+          }
+});
+}
 
   @override
   Widget build(BuildContext context) {
@@ -284,17 +296,21 @@ class SettingsScreenState extends State<SettingsScreen> {
 
               // Button
               Container(
-                child: FlatButton(
-                  onPressed: handleUpdateData,
-                  child: Text(
-                    'UPDATE',
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                  color: primaryColor,
-                  highlightColor: new Color(0xff8d93a0),
-                  splashColor: Colors.transparent,
-                  textColor: Colors.white,
-                  padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
+                child: Builder(
+                  builder: (context) {
+                    return FlatButton(
+                      onPressed: handleUpdateData,
+                      child: Text(
+                        'UPDATE',
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                      color: primaryColor,
+                      highlightColor: new Color(0xff8d93a0),
+                      splashColor: Colors.transparent,
+                      textColor: Colors.white,
+                      padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
+                    );
+                  }
                 ),
                 margin: EdgeInsets.only(top: 50.0, bottom: 50.0),
               ),
