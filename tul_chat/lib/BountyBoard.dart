@@ -158,8 +158,7 @@ class _BountyBoardState extends State<BountyBoard> {
       snapshot.documents.forEach((f) => print('${f.data}}'));
     });
   }
-
-// user defined function
+  // user defined function
   void _showDialog(DocumentSnapshot document) {
     String userID = document['UserID'];
     // flutter defined function
@@ -183,12 +182,26 @@ class _BountyBoardState extends State<BountyBoard> {
                 List<String> ids = <String>[];
                 ids.add(userID); 
                 List<String> ids1 = <String>[];
-                ids1.add(id); 
+                ids1.add(id);
                 // To dodaje
-                Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayUnion(ids)});
-                Firestore.instance.collection("users").document(userID).updateData({"ableToChatWith": FieldValue.arrayUnion(ids1)});
-                Firestore.instance.collection("tasks").document(document.documentID).updateData({"AssignedUser": id});
-
+                Firestore.instance.collection("users").document(id).get().then((value) {
+                  Firestore.instance.collection("users")
+                      .document(id)
+                      .updateData(
+                      {"ableToChatWith": FieldValue.arrayUnion(ids)});
+                  Firestore.instance.collection("users")
+                      .document(userID)
+                      .updateData(
+                      {"ableToChatWith": FieldValue.arrayUnion(ids1)});
+                  Firestore.instance.collection("tasks").document(
+                      document.documentID).updateData({"AssignedUser": id});
+                  Firestore.instance.collection("tasks").document(
+                      document.documentID).updateData(
+                      {"AssignedNickname": value.data['nickname']});
+                  Firestore.instance.collection("tasks").document(
+                      document.documentID).updateData(
+                      {"AssignedPhotoUrl": value.data['photoUrl']});
+                });
                 // To polecenie usuwa odpowiedni userID z userow
                 // Firestore.instance.collection("users").document(id).updateData({"ableToChatWith": FieldValue.arrayRemove(ids)});
                 // Firestore.instance.collection("users").document(userID).updateData({"ableToChatWith": FieldValue.arrayRemove(ids1)});

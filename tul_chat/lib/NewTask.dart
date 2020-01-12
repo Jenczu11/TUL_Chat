@@ -74,7 +74,9 @@ class _NewTaskState extends State<NewTask> {
                   'fieldOfStudy': fieldOfStudy.text,
                   'yearOfStudy': yearOfStudy,
                   'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
-                  'AssignedUser': ""
+                  'AssignedUser': "",
+                  'AssignedNickname' : "",
+                  'AssignedPhotoUrl' : ""
                 });
                 titleValue.clear();
                 description.clear();

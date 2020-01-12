@@ -52,7 +52,24 @@ class _MyTasksState extends State<MyTasks> {
                       ),
                       alignment: Alignment.centerLeft,
                       margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                    ),
+                    if(document["AssignedNickname"]== "") Container(
+                      child: Text(
+                        'Handled by : No one',
+                        // style: TextStyle(color: primaryColor),
+                      ),
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                     )
+                    else Container(
+                      child: Text(
+                        'Handled by : ${document['AssignedNickname']}',
+                        // style: TextStyle(color: primaryColor),
+                      ),
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                    ),
+                    Image.network(document['AssignedPhotoUrl']),
                   ],
                 ),
                 margin: EdgeInsets.only(left: 20.0),
@@ -195,7 +212,9 @@ class _MyTasksState extends State<MyTasks> {
                         Firestore.instance
                             .collection('tasks')
                             .document(taskID)
-                            .updateData({"AssignedUser": ""});
+                            .updateData({"AssignedUser": "",
+                        "AssignedPhotoUrl": "",
+                        "AssignedNickname": ""});
                       },
                     ),
                   ],
