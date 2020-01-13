@@ -22,6 +22,8 @@ class _NewTaskState extends State<NewTask> {
   String AssignedUser = null;
   SharedPreferences prefs;
   String id;
+  String creatorsNickname;
+  String creatorsPhotoUrl;
   @override
   void initState() {}
 
@@ -34,10 +36,10 @@ class _NewTaskState extends State<NewTask> {
             icon: Icon(Icons.add),
             label: Text('Add'),
             onPressed: () async {
-              print("Dodaje zadanie");
               prefs = await SharedPreferences.getInstance();
               id = prefs.getString('id') ?? '';
-              print(id);
+              creatorsNickname = prefs.getString('nickname') ?? '';
+              creatorsPhotoUrl = prefs.getString('photoUrl') ?? '';
               if((!(titleValue.text.length>=5) && (titleValue.text.isNotEmpty)) ||(titleValue.text.isEmpty) || (titleValue.text.contains("  "))){
                 Scaffold.of(context).showSnackBar(SnackBar(
                   content: Text("Couldn't add new task\nTitle value has to consists of at least 5 characters"),
@@ -68,6 +70,8 @@ class _NewTaskState extends State<NewTask> {
               else{
                 Firestore.instance.collection('tasks').add({
                   'UserID': id,
+                  "UserNickname": creatorsNickname,
+                  "UserPhoto":creatorsPhotoUrl,
                   'taskTitle': titleValue.text,
                   'taskDescription': description.text,
                   'department': deparment,

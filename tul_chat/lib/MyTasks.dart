@@ -30,61 +30,65 @@ class _MyTasksState extends State<MyTasks> {
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
     return Container(
-      child: FlatButton(
-        child: Row(
-          children: <Widget>[
-            Flexible(
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      child: Text(
-                        'Task: ${document['taskTitle']}',
-                        // style: TextStyle(color: primaryColor),
+      child: Column(
+        children: <Widget>[
+        FlatButton(
+          child: Row(
+            children: <Widget>[
+              Flexible(
+                child: Container(
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        child: Text(
+                          'Task: ${document['taskTitle']}',
+                          // style: TextStyle(color: primaryColor),
+                        ),
+                        alignment: Alignment.centerLeft,
+                        margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
                       ),
-                      alignment: Alignment.centerLeft,
-                      margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
-                    ),
-                    Container(
-                      child: Text(
-                        'Task Description: ${document['taskDescription'] ?? 'Not available'}',
-                        // style: TextStyle(color: primaryColor),
+                      Container(
+                        child: Text(
+                          'Task Description: ${document['taskDescription'] ?? 'Not available'}',
+                          // style: TextStyle(color: primaryColor),
+                        ),
+                        alignment: Alignment.centerLeft,
+                        margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                       ),
-                      alignment: Alignment.centerLeft,
-                      margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                    ),
-                    if(document["AssignedNickname"]== "") Container(
-                      child: Text(
-                        'Handled by : No one',
-                        // style: TextStyle(color: primaryColor),
+                      if(document["AssignedNickname"]== "") Container(
+                        child: Text(
+                          'Handled by : No one',
+                          // style: TextStyle(color: primaryColor),
+                        ),
+                        alignment: Alignment.centerLeft,
+                        margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                      )
+                      else Container(
+                        child: Text(
+                          'Handled by : ${document['AssignedNickname']}',
+                          // style: TextStyle(color: primaryColor),
+                        ),
+                        alignment: Alignment.centerLeft,
+                        margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                       ),
-                      alignment: Alignment.centerLeft,
-                      margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                    )
-                    else Container(
-                      child: Text(
-                        'Handled by : ${document['AssignedNickname']}',
-                        // style: TextStyle(color: primaryColor),
-                      ),
-                      alignment: Alignment.centerLeft,
-                      margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                    ),
-                    Image.network(document['AssignedPhotoUrl']),
-                  ],
+                      Image.network(document['AssignedPhotoUrl']),
+                    ],
+                  ),
+                  margin: EdgeInsets.only(left: 20.0),
                 ),
-                margin: EdgeInsets.only(left: 20.0),
               ),
-            ),
-          ],
+            ],
+          ),
+          color: greyColor2,
+          padding: EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 10.0),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          onPressed: () {
+            //TODO : destroy task
+            _showDialog(document);
+          },
         ),
-        color: greyColor2,
-        padding: EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 10.0),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        onPressed: () {
-          //TODO : destroy task
-          _showDialog(document);
-        },
+        ]
       ),
       margin: EdgeInsets.only(bottom: 10.0, left: 5.0, right: 5.0),
     );

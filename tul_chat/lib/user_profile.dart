@@ -16,11 +16,14 @@ class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar:BaseAppBar(
-        title: "User profile",
-        appBar: AppBar(),
-        widgets: <Widget>[Icon(Icons.more_vert)],
-        context: context,
+      appBar:AppBar(
+        backgroundColor: themeColor,
+        title: Text(
+          "User profile",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
       ),
       body: new SettingsScreen(),
     );

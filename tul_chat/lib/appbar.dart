@@ -17,9 +17,10 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
   final AppBar appBar;
   final List<Widget> widgets;
   final List<Choice> choices = const <Choice>[
+    const Choice(title: 'User profile', icon: Icons.account_circle),
     const Choice(title: 'Log out', icon: Icons.exit_to_app),
     const Choice(title: 'Exit', icon: Icons.close),
-    const Choice(title: 'About us', icon: Icons.person),
+    const Choice(title: 'About us', icon: Icons.group),
   ];
 
   const BaseAppBar(
@@ -74,6 +75,9 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
     if (choice.title == 'About us') {
       onAboutUsPressed();
     }
+    if (choice.title == 'User profile') {
+      onUserProfilePressed();
+    }
   }
 
   Future<Null> handleSignOut() async {
@@ -95,6 +99,13 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => AboutUs()),
+    );
+  }
+
+  Future<Null> onUserProfilePressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Settings()),
     );
   }
 

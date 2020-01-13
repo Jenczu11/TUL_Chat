@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_demo/AcceptedTasks.dart';
 import 'package:flutter_chat_demo/BountyBoard.dart';
 import 'package:flutter_chat_demo/NewTask.dart';
 import 'package:flutter_chat_demo/main.dart';
@@ -65,7 +66,7 @@ class _HomeState extends State<Home> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
-        notchMargin: 10,
+        notchMargin: 5,
         child: Container(
           height: 60,
           child: Row(
@@ -137,7 +138,7 @@ class _HomeState extends State<Home> {
                     minWidth: 40,
                     onPressed: () {
                       setState(() {
-                        currentScreen = Settings(); // if user taps on this dashboard tab will be active
+                        currentScreen = AcceptedTasks(); // if user taps on this dashboard tab will be active
                         currentTab = 2;
                       });
                     },
@@ -149,7 +150,7 @@ class _HomeState extends State<Home> {
                           color: currentTab == 2 ? themeColor : Colors.grey,
                         ),
                         Text(
-                          'Profile',
+                          'Accepted',
                           style: TextStyle(
                             color: currentTab == 2 ? themeColor : Colors.grey,
                           ),
