@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "16180470430",
+    "firebase_url": "https://tul-chat.firebaseio.com",
+    "project_id": "tul-chat",
+    "storage_bucket": "tul-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16180470430:android:fdefb631729c60d164d18f",
+        "android_client_info": {
+          "package_name": "com.kkbj.tulapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "16180470430-tcmgkrpi4o09m457kik64o2nb3kkdbrr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kkbj.tulapp",
+            "certificate_hash": "020626d7d2c970990fd3b78660efbc03b0cc8ee8"
+          }
+        },
+        {
+          "client_id": "16180470430-k3ocvehqid4rqrt6sfb3bcij6isj7pub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKAONcvLAsFmSZl4URauzHJEH4cZmuGq8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "16180470430-k3ocvehqid4rqrt6sfb3bcij6isj7pub.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

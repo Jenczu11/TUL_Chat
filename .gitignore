@@ -32,3 +32,8 @@ android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
 android/.gradle/
 .gradle
 
+tul_chat/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
+tul_chat/ios/Runner/GeneratedPluginRegistrant.h
+tul_chat/ios/Runner/GeneratedPluginRegistrant.m
+tul_chat/pubspec.lock
+
